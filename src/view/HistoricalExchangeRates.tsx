@@ -40,7 +40,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
    */
   componentWillMount(): void {
     this.setState({
-      data: [[97,92,89,30,72],[43,62,84,98,3],[23,88,52,14,4],[76,9,1,67,84],[56,89,13,7,24]],//,[61,56,7,87,13],[36,89,15,19,24],[5,9,28,17,4],[45,29,8,7,4],[52,94,81,72,42],[18,4,31,22,22],[2,9,1,2,2],[52,44,58,46,42],[33,64,22,12,2],[82,104,64,98,80]],
+      data: [],//[[97,92,89,30,72],[43,62,84,98,3],[23,88,52,14,4],[76,9,1,67,84],[56,89,13,7,24]],//,[61,56,7,87,13],[36,89,15,19,24],[5,9,28,17,4],[45,29,8,7,4],[52,94,81,72,42],[18,4,31,22,22],[2,9,1,2,2],[52,44,58,46,42],[33,64,22,12,2],[82,104,64,98,80]],
       currencyOptions: null
     });
     fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
@@ -49,30 +49,65 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       return results.json();
     }).then(currencies => {
       this.setState({ currencyOptions: currencies });
-      console.log(currencies);
-    })
+    });
+    let today = new Date();
+    let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
+    this.addGraph('ISK', 'EUR', sixMonthsBefore, today );
+  }
+
+  /**
+   * Adds a new graph to line chart for souce and target currency for a given peroid range (from-to)
+   */
+  addGraph(sourceCurrencyID: string, destCurrencyID: string, dateFrom: Date, dateTo: Date){
+    fetch(
+      'https://api.landsbankinn.is/Securities/Currencies/v2/'
+      + 'Currencies/' + sourceCurrencyID
+      + '/Rates/' + destCurrencyID + '/History?'
+      + 'source=general&from=' + this.toDateStr(dateFrom)
+      + '&to=' + this.toDateStr(dateTo),
+          { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
+    ).then(results => {
+      return results.json();
+    }).then(newGraphData => {
+      this.state.data.push(newGraphData);
+      let newData = this.state.data;
+      this.setState({ data: newData });
+    });
+  }
+
+  /**
+   * Returns parameter date in a YYYY-MM-DD format
+   */
+  toDateStr(date: Date): string {
+    return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   }
 
   /**
    * Deletes a subgraph from the line chart
-   **/
+   */
   deleteGraph(graphIdx: number): void {
     this.state.data.splice(graphIdx, 1);
     let newData = this.state.data;
-    console.log(newData);
     this.setState({ data: newData });
   }
   
   /* Render data */
   render(): JSX.Element {
-    console.log(this.state.currencyOptions);
-    if(this.state.currencyOptions !== null) {
+    if(this.state.currencyOptions !== null && this.state.data.length !== 0) {
       return (
         <div className="app-container">
           <Logo />
           <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
           <div className="graph-container">
-            <AddCurrency maximumExceeded={this.state.data.length-1 >= 14} currencies={this.state.currencyOptions}/>
+            <AddCurrency
+              addGraph={(source: string, target: string) => {
+                let today = new Date();
+                let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
+                this.addGraph(source, target, sixMonthsBefore, today);
+              }}
+              maximumExceeded={this.state.data.length-1 >= 14}
+              currencies={this.state.currencyOptions}
+            />
             <LineChart
               data={this.state.data}
               axis={['October', 'November', 'December', 'January', 'February', 'Marsh']}

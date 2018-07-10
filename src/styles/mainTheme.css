@@ -36,11 +36,13 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: black;
+  color: #e7e3e3;
   margin-top: 15px;
+  font-weight: 100;
+  font-size: 10px;
 }
 .add-currency-options > *{
-  margin: 5px 5px;
+  margin: 5px 15px;
 }
 
 /** LINE CHART GRAPH AND TOOLTIPS **/

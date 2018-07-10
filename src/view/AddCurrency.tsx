@@ -3,6 +3,7 @@ import * as React from 'react';
 interface AddCurrencyProps {
   maximumExceeded: boolean;
   currencies: any;
+  addGraph: any;
 }
 interface AddCurrencyState {
   sourceCurrency: any;
@@ -29,8 +30,6 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
   }
   addCurrency(): void {
     const { sourceCurrency, destCurrency } = this.state;
-    console.log(sourceCurrency);
-    console.log(destCurrency);
     const { maximumExceeded } = this.props;
     if (sourceCurrency === destCurrency ) {
       this.setState({ errorMessage: 'Vinsamlegast veldu mismunandi myntir í báða reiti'});
@@ -40,6 +39,7 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
       this.setState({ errorMessage: 'Of margir gengissamanburðir virkir, vinsamlegast fjarlægðu einn eða fleiri'});
     }else {
       this.setState({ errorMessage: ' '});
+      this.props.addGraph(sourceCurrency, destCurrency );
     }
   }
   render(): JSX.Element {
@@ -47,16 +47,6 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
     return(
       <div>
       <div className='add-currency-options'>
-        <select
-          className='currency-select'
-          id='source-currency'
-          onChange={(e: any) => this.setState({sourceCurrency: e.target.value}) }
-        >
-          { currencies.map((currency: any, i: any) =>
-            <option selected={currency.id === 'ISK' ? true : false} key={i} value={currency.id}>{currency.id}: {currency.name}</option>
-					)} 
-        </select>
-        <p>/</p>
         <select
           className='currency-select'
           id='target-currency'
@@ -67,6 +57,16 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
             <option key={i} value={currency.id}>{currency.id}: {currency.name}</option>
 					)} 
         </select> 
+        <p>|</p>
+        <select
+          className='currency-select'
+          id='source-currency'
+          onChange={(e: any) => this.setState({sourceCurrency: e.target.value}) }
+        >
+          { currencies.map((currency: any, i: any) =>
+            <option selected={currency.id === 'ISK' ? true : false} key={i} value={currency.id}>{currency.id}: {currency.name}</option>
+					)} 
+        </select>
         <div className="small-gray-btn" onClick={() => this.addCurrency()}>+</div>
       </div>
       <p style={{ height: '10px', fontSize: '12px', textAlign: 'center', color: 'red' }}>{this.state.errorMessage}</p>

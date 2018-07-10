@@ -8,8 +8,8 @@ import GraphChip from './GraphChip';
 let colors = [ '#194262', '#E91E63', '#4CAF50', '#009688', '#FF5722', '#607D8B', '#263238', '#F44336', '#2196F3', '#90A4AE', '#673AB7', '#3F51B5', '#FF5722', '#FF5722', '#9C27B0', '#FFEB3B', '#CDDC39', '#8BC34A'];
 const transparent = '#FFFFFF00';
 const lightGray = '#EAEAEA';
-// const monthID = [ 'jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des' ];
-// const months = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember' ];
+const monthID = [ 'jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des' ];
+const months = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember' ];
 
 
 /**
@@ -62,26 +62,32 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 	render(): JSX.Element {
 
 		/* Configure chart appearance */
-		const { data, axis } = this.props;
+		const { data } = this.props;
 		const width = 650;
 		const height = width * .4;
 		const size = data.length === 0 ? 1 : data[0].length - 1;
 		const padding = 50;
 	
-    /* Calculate highest point to set proper height ratio */
-		let dataSet: any = [], maxValue = 0, heightRatio = 1;
-    dataSet = data.forEach((pts: any) => {
-      let max = Math.max.apply(null, pts)		
-      maxValue =	max > maxValue ? max : maxValue	
-		}); heightRatio = maxValue === 0 ? 1 : height / maxValue;
-		
+    /* Calculate highest point to set proper height and width ratio */
+		let dataSet: any = [], minValue = Number.MAX_VALUE, maxValue = 0, heightRatio = 1;
+		let firstDataset = data[0], minDate = new Date(firstDataset[0].date), maxDate = new Date(firstDataset[0].date);
+    dataSet = data.forEach((pts: any, i: number) => {
+			pts.map((p: any) => {
+				p.mid > maxValue ? maxValue = p.mid : null;
+				p.mid < minValue ? minValue = p.mid : null;
+				const currDate = new Date(p.date);
+				currDate.getTime() > maxDate.getTime() ? maxDate = currDate : null;
+				currDate.getTime() < minDate.getTime() ? minDate = currDate : null;
+			})
+		}); heightRatio = maxValue === 0 ? 1 : height / (maxValue - minValue);
+
 		/* Setup data, calculate x and y coordinates and set color */
 		dataSet = data.map((pts: any, datasetIndex: any) =>
 			pts.map((pt: any, pi: any) => ({
-				x: ~~((width / size) * pi + padding) + .5,								/* x coordinate of point in graph */
-				y: ~~((heightRatio) * (maxValue - pt) + padding) + .5,		/* y coordinate of point in graph */
-				value: pt,																								/* value point holds */
-				color: colors[datasetIndex % colors.length]								/* color assigned to point (and dataset) */
+				x: ~~((width / size) * pi + padding) + .5,										/* x coordinate of point in graph */
+				y: ~~((heightRatio) * (maxValue - pt.mid) + padding) + .5,		/* y coordinate of point in graph */
+				value: pt,																										/* value point holds */
+				color: colors[datasetIndex % colors.length]										/* color assigned to point (and dataset) */
 			})		
 		));
 		
@@ -97,8 +103,9 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 					{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
 						<GraphChip
 							key={graphIdx}
-							title={graphIdx}
+							title={comparisonGraph[0].value.baseCurrency + '-' + comparisonGraph[0].value.quoteCurrency}
 							color={ colors[graphIdx % colors.length] }
+							last={dataSet.length===1}
 							onDelete={() => {
 								this.pushBackColor( colors[graphIdx % colors.length], (graphIdx % colors.length));
 								this.props.deleteGraph(graphIdx);
@@ -112,13 +119,15 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 				>
 					<g>
 						<XAxis
-							axis={axis}
+							minDate={minDate}
+							maxDate={maxDate}
 							padding={padding}
 							width={width}
 							height={height}
 						/>
 						<YAxis
 							maxValue={maxValue}
+							minValue={minValue}
 							padding={padding}
 							width={width}
 							height={height}
@@ -163,15 +172,16 @@ interface TooltipProps {
   point: any;				/* point value tooltip displays, it's coordinates and color */
 }
 const Tooltip = ({ point }: TooltipProps) => {
+	const { value } = point;
+	const date = new Date(value.date)
   return (
 		<span
 			className="rate-history-chart--tooltip"
-			style={{ color: point.color, left: ~~point.x, top: ~~point.y+20 }}
+			style={{ textAlign: 'center', color: point.color, left: ~~point.x, top: ~~point.y+20 }}
 		>
-			{/* <p><strong>ESR-RSE</strong></p>
-			<p>10. júlí 2018 kl 14:31</p>
-			<p>Breyting: 0%</p> */}
-			<p>{point.value}</p>
+			<p><strong>{value.baseCurrency}-{value.quoteCurrency}</strong></p>
+			<p>{date.getDate()}. {months[date.getMonth()]} {date.getFullYear()}</p>
+			<p>Miðgengi: {value.mid}</p>
     </span>
   );
 };
@@ -183,13 +193,23 @@ const Tooltip = ({ point }: TooltipProps) => {
 interface YAxisProps {
   padding: number;							/* padding of linechart in px */
   height: number;								/* linechart height in px */
-	maxValue: number;							/* highest y value of linechart in px */
+	maxValue: number;							/* highest y value of linechart */
+	minValue: number;							/* lowest y value of linechart */
 	width: number;								/* linechart width in px */
 }
-const YAxis = ({ padding, height, maxValue, width }: YAxisProps) => {
+const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
 	const numAxis = 6;											/* number of axis */
 	let axis = [];
 
+	/* get interval values */
+	const intervalStep = (maxValue - minValue) / numAxis;
+	let intervals = [], currVal = maxValue;
+	intervals.push(maxValue);
+	for (let i = 1; i < numAxis; i++) {
+		currVal -= intervalStep;
+		intervals.push(currVal);
+	} intervals.push(minValue); 
+	
 	/* set up all axis */
 	for (let i = 0; i < numAxis; i++) {
 		const y = ~~(i * (height / (numAxis-1)) + padding) + .5
@@ -209,7 +229,8 @@ const YAxis = ({ padding, height, maxValue, width }: YAxisProps) => {
 					y={ y + 2 }
 					textAnchor="end"
 				>
-					{~~(maxValue / (numAxis-1)) * ((numAxis-1) - i)}
+					{/* {~~(maxValue / (numAxis-1)) * ((numAxis-1) - i)} */}
+					{intervals[i].toFixed(2)}
 				</text>
 			</g>
 		);
@@ -225,14 +246,28 @@ const YAxis = ({ padding, height, maxValue, width }: YAxisProps) => {
 interface XAxisProps {
   padding: number;							/* padding of linechart in px */
   height: number;								/* linechart height in px */
-	axis: any;										/* x axis values in array */
-	width: number;								/* linechart width in px */
+	minDate: Date;								/* min x value in for data */
+	maxDate: Date;								/* max x value in array */
+	width: number;								/* linechart width data px */
 }
-const XAxis = ({ padding, height, axis, width }: XAxisProps) => {
+const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
 	let yaxis = [];										
 	const numAxis = 10;						/* number of axis */
 	height = height + padding;		/* height for chart */
+
+	/* set up axis */
+  const intervalStep = (maxDate.getTime() - minDate.getTime()) / (numAxis-1);
+  const intervals = [];
+  intervals.push(minDate);
+	for (let i = 1; i < numAxis-1; i++) {
+		const day = new Date(minDate);
+		day.setMilliseconds(i * intervalStep);
+		intervals.push(day);
+	}
+	intervals.push(maxDate);
 	
+	console.log(intervals);
+
 	/* set up all axis */
 	for (let i = 0; i < numAxis; i++) {
 		let x = ~~(i * (width / (numAxis-1)) + padding) + .5
@@ -244,7 +279,7 @@ const XAxis = ({ padding, height, axis, width }: XAxisProps) => {
 					y={height + 15}
 					textAnchor="middle"
 				>
-					{ axis[i % axis.length] }
+					{ intervals[i].getDate() + '. ' + monthID[intervals[i].getMonth()] + ' ' + intervals[i].getFullYear()}
 				</text>
 
 			</g>

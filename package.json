@@ -1,10 +1,10 @@
 {
   "name": "axolot-client",
   "version": "1.0.0",
-  "description": "Axolot Client Front End - FlashCards and Study Help",
+  "description": "Gengisþróun",
   "main": "index.tsx",
   "repository": "",
-  "author": "Arnar Freyr and Edda Steinunn",
+  "author": "Edda Steinunn",
   "private": true,
   "scripts": {
     "start": "node set_env.js prod&./node_modules/.bin/webpack-dev-server --history-api-fallback --progress",
