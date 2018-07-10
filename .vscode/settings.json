@@ -1,0 +1,7 @@
+{
+    "editor.tabSize": 2,
+    "tslint.packageManager": "yarn",
+    "tslint.jsEnable": false,
+    "tslint.autoFixOnSave": true,
+    "tslint.exclude": "**/node_modules/**"
+}
