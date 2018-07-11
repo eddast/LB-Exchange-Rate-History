@@ -52,7 +52,6 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
   }
 
   longerThanDay(time: number): boolean {
-    console.log(time);
     return time > 86400000;
   }
 
