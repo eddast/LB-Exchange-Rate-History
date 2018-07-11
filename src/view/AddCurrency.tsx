@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface AddCurrencyProps {
-  maximumExceeded: boolean;
+  maximumExceeded: boolean; 
   currencies: any;
   addGraph: any;
   activeComparions: any;
@@ -33,15 +33,9 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
   }
   addCurrency(): void {
     const { sourceCurrency, destCurrency } = this.state;
-    const { maximumExceeded } = this.props;
-    if (sourceCurrency === destCurrency ) {
-      this.setState({ errorMessage: 'Vinsamlegast veldu mismunandi gjaldmiðla í báða reiti'});
-    } else if (destCurrency === '') {
-      this.setState({ errorMessage: 'Vinsamlegast veldu gjaldmiðil í báða reiti'});
-    } else if (this.props.activeComparions.includes(sourceCurrency+'-'+destCurrency)) {
-      this.setState({ errorMessage: 'Gengissamanburður þessa gjaldmiðla er þegar virkur'});
-    } else if(maximumExceeded) {
-      this.setState({ errorMessage: 'Of margir gengissamanburðir virkir, vinsamlegast fjarlægðu einn eða fleiri til að bæta við nýjum gengissamanburð'});
+    const compCrossValid = this.invalidSelect();
+    if (compCrossValid.error) {
+      this.setState({ errorMessage: compCrossValid.reasonPhrase});
     } else {
       this.setState({ errorMessage: '', isAdding: true});
       this.props.addGraph(sourceCurrency, destCurrency, ((success: boolean, status: number) => {
@@ -52,25 +46,42 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
             status + ': Eitthvað fór úrskeiðis við að sækja gögn úr gagnagrunni, vinsamlegast athugaðu tengingu',
             isAdding: false
           });
-        } else {
-          this.setState({ isAdding: false });
-        }
+        } else { this.setState({ isAdding: false }); }
       }));
     }
   }
-  invalidSelect(): boolean {
+  invalidSelect(): any {
     const { sourceCurrency, destCurrency } = this.state;
     const { maximumExceeded } = this.props;
-    return (
-      maximumExceeded ||
-      sourceCurrency === destCurrency ||
-      // destCurrency === '' ||
-      this.props.activeComparions.includes(sourceCurrency+'-'+destCurrency)
-    );
+    if (sourceCurrency === destCurrency ) {
+      return {
+        error: true,
+        reasonPhrase: 'Vinsamlegast veldu mismunandi gjaldmiðla í báða reiti'
+      };
+    } else if (destCurrency === '') {
+      return {
+        error: true,
+        reasonPhrase: 'Vinsamlegast veldu gjaldmiðil í báða reiti'
+      };
+    } else if (this.props.activeComparions.includes(sourceCurrency+'-'+destCurrency)) {
+      return {
+        error: true,
+        reasonPhrase: 'Samanburður þessa gjaldmiðla þegar valinn'
+      }
+    } else if(maximumExceeded) {
+      return {
+        error: true,
+        reasonPhrase: 'Of margir samanburðir virkir, fjarlægðu einn eða fleiri til að bæta við nýjum gengissamanburð'
+      }
+    } else {
+      return {
+        error: false
+      }
+    }
   }
   render(): JSX.Element {
     const { currencies } = this.props;
-    const error = this.invalidSelect();
+    const error = this.invalidSelect().error;
     return(
       <div>
         <div className='add-currency-options'>
