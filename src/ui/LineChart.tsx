@@ -1,11 +1,5 @@
 import * as React from 'react';
-
-/**
- * CONSTANTS
- * */
-const monthID = [ 'jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des' ];
-const months = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember' ];
-
+import { months, monthID } from '../resources/constants';
 
 /**
  * LINECHART COMPONENT
@@ -196,7 +190,7 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
 					y1={ y }
 					x2={ width + padding }
 					y2={ y }
-					stroke={'#EAEAEA'}
+					stroke={'#c7c2c2'}
 					strokeWidth='1px'
 				/>
 				<text

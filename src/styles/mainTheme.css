@@ -76,13 +76,12 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #bdb7b7;
+  color: #194262;
   font-weight: 100;
-  font-size: 10px;
+  font-size: 14px;
 }
 .add-currency-options > *{
-  margin: 10px 20px;
-  margin-top: 0px;
+  margin: 0px 20px;
 }
 .add-currency-options .small-gray-btn{
   margin-left: 20px;
@@ -161,7 +160,8 @@ html, body, #root {
 .rate-history-chart--axis {
   font-family: Sans-serif;
   font-size: 10px;
-  fill: #ccc;
+  fill: #194262;
+  opacity: .8;
 }	
 .rate-history-chart--label {
   font-family: Sans-serif;
@@ -192,7 +192,7 @@ html, body, #root {
   white-space: nowrap;
 }
 .graph-chips {
-  margin-top: 20px;
+  margin-top: 5px;
   display: grid;
   grid-template-columns: repeat(5, auto);
 }
@@ -210,6 +210,7 @@ html, body, #root {
   padding: 0;
   margin: 0 -4px 0 4px;
   cursor: pointer;
+  font-size: 14px;
   font-weight: 100;
   line-height: 20px;
 }
@@ -246,6 +247,7 @@ html, body, #root {
   font-weight: lighter;
   font-size: 12px;
   margin: 30px 0;
+  width: 100%;
 }
 .currency-table thead {
   white-space: nowrap;

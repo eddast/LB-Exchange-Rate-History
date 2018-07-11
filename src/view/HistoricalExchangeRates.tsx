@@ -3,6 +3,7 @@ import LineChart from '../ui/LineChart';
 import AddCurrency from './AddCurrency';
 import CurrencyTable from '../ui/CurrencyTable';
 import GraphChip from '../ui/GraphChip';
+import { colors } from '../resources/constants';
 
 /**
  * LOGO COMPONENT: Displays banner and logo, credits to Landsbankinn
@@ -39,8 +40,6 @@ interface HistoricalExchangeRatesState {
 
 export default class HistoricalExchangeRates extends React.Component <HistoricalExchangeRatesProps, HistoricalExchangeRatesState> {	
   
-  private colors: any = [ '#194262', '#E91E63', '#4CAF50', '#009688', '#FF5722', '#607D8B', '#263238', '#F44336', '#2196F3', '#90A4AE', '#673AB7', '#3F51B5', '#FF5722', '#FF5722', '#9C27B0', '#FFEB3B', '#CDDC39', '#8BC34A'];
-
   /**
    * Initialize state and fetch currency options
    * Fetch ISK-EUR as default on start
@@ -52,7 +51,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       currencyOptions: null,
       fatalError: false,
       activeComparions: [],
-      colors: this.colors
+      colors: colors
     });
     fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
@@ -96,7 +95,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     }).then(newGraphData => {
       if(newGraphData !== null) {
         this.state.data.push(newGraphData);
-        this.state.activeComparions.push(destCurrencyID+'-'+sourceCurrencyID)
+        this.state.activeComparions.push(sourceCurrencyID+'-'+destCurrencyID)
         let newData = this.state.data;
         this.setState({ data: newData });
       }
@@ -160,17 +159,16 @@ export default class HistoricalExchangeRates extends React.Component <Historical
                 />
               )}
           </span>
-            <p style={{ color: 'black' }}>//TODO velja tímabil</p>
             <h3>Gengisþróun samanburða</h3>
-            <LineChart
-              data={this.state.data}
-              colors={this.state.colors}
-              deleteGraph={(graphIdx: number) => this.deleteGraph(graphIdx)}
-            />
             <CurrencyTable
               data={this.state.data}
               colors={this.state.colors}
               deleteComparison={(graphIdx: number) => this.deleteGraph(graphIdx)}
+            />
+            <LineChart
+              data={this.state.data}
+              colors={this.state.colors}
+              deleteGraph={(graphIdx: number) => this.deleteGraph(graphIdx)}
             />
           </div>
         </div>

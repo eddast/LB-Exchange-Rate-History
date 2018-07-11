@@ -40,7 +40,7 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
 			});
 			const tableEntry = {
         id: i,
-        currencies: pts[0].baseCurrency + '-' + pts[0].quoteCurrency,
+        currencies: pts[0].quoteCurrency + '-' + pts[0].baseCurrency,
 				initialMid: parseFloat(pts[0].mid),
 				endMid: parseFloat(pts[pts.length-1].mid.toFixed(4)),
 				lowestMid: parseFloat(currentLowestMid.toFixed(4)),
