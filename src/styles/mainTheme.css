@@ -77,12 +77,12 @@ html, body, #root {
   justify-content: center;
   align-items: center;
   color: #bdb7b7;
-  margin-top: 15px;
   font-weight: 100;
   font-size: 10px;
 }
 .add-currency-options > *{
   margin: 10px 20px;
+  margin-top: 0px;
 }
 .add-currency-options .small-gray-btn{
   margin-left: 20px;
