@@ -1,11 +1,5 @@
 import * as React from 'react';
-
-/**
- * CONSTANTS
- * */
-const monthID = ['jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des'];
-const months = ['janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'];
-
+import { months, monthID } from '../resources/constants';
 
 /**
  * LINECHART COMPONENT
