@@ -1,5 +1,4 @@
 import * as React from 'react';
-import GraphChip from './GraphChip';
 
 /**
  * CONSTANTS
@@ -88,66 +87,53 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 	 * Plot axis from data's maximum values
 	 * For each data set, plot it's points and lines between it on graph
 	 */
-	return (
-		<span>
-			<span className="graph-chips">
-				{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
-					<GraphChip
-						key={graphIdx}
-						title={comparisonGraph[0].value.baseCurrency + '-' + comparisonGraph[0].value.quoteCurrency}
-						color={ this.props.colors[graphIdx % this.props.colors.length] }
-						last={dataSet.length===1}
-						onDelete={() => this.props.deleteGraph(graphIdx)}
-					/>
-				)}
-			</span>
-				<span className="rate-history-chart" style={{ width: width + 2*padding }}>
-					<svg
-						width={(width + padding * 2)+'px'}
-						height={(height + 2*padding)+'px'}
-					>
-						<g>
-							<XAxis
-								minDate={minDate}
-								maxDate={maxDate}
-								padding={padding}
-								width={width}
-								height={height}
+		return (
+			<span className="rate-history-chart" style={{ width: width + 2*padding }}>
+				<svg
+					width={(width + padding * 2)+'px'}
+					height={(height + 2*padding)+'px'}
+				>
+					<g>
+						<XAxis
+							minDate={minDate}
+							maxDate={maxDate}
+							padding={padding}
+							width={width}
+							height={height}
+						/>
+						<YAxis
+							maxValue={maxValue}
+							minValue={minValue}
+							padding={padding}
+							width={width}
+							height={height}
+						/>
+					</g>
+					{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
+						<g key={ graphIdx }>
+							<Lines
+								points={ comparisonGraph }
+								dataSetIndex={ graphIdx }
+								width={ width }
+								height={ height }
+								padding={ padding }
+								color={ this.props.colors[graphIdx % this.props.colors.length] }
+								updating={ this.state.updating }
 							/>
-							<YAxis
-								maxValue={maxValue}
-								minValue={minValue}
-								padding={padding}
-								width={width}
-								height={height}
+							<Points
+								points={ comparisonGraph }
+								dataSetIndex={ graphIdx }
+								showTooltip={ this.showTooltip }
+								hideTooltip={ () => this.setState({ tooltip: false }) }
 							/>
 						</g>
-						{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
-							<g key={ graphIdx }>
-								<Lines
-									points={ comparisonGraph }
-									dataSetIndex={ graphIdx }
-									width={ width }
-									height={ height }
-									padding={ padding }
-									color={ this.props.colors[graphIdx % this.props.colors.length] }
-									updating={ this.state.updating }
-								/>
-								<Points
-									points={ comparisonGraph }
-									dataSetIndex={ graphIdx }
-									showTooltip={ this.showTooltip }
-									hideTooltip={ () => this.setState({ tooltip: false }) }
-								/>
-							</g>
-						)}
-					</svg>
-					{ this.state.tooltip ?
-						<Tooltip
-							point={this.state.tooltipPoint}
-						/>
-					: null }
-				</span>
+					)}
+				</svg>
+				{ this.state.tooltip ?
+					<Tooltip
+						point={this.state.tooltipPoint}
+					/>
+				: null }
 			</span>
 		);
 	}

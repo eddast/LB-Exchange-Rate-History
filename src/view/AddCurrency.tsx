@@ -39,7 +39,7 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
     } else if (destCurrency === '') {
       this.setState({ errorMessage: 'Vinsamlegast veldu gjaldmiðil í báða reiti'});
     } else if (this.props.activeComparions.includes(destCurrency+'-'+sourceCurrency)) {
-      this.setState({ errorMessage: 'gengissamanburður þessa gjaldmiðla er þegar virkur'});
+      this.setState({ errorMessage: 'Gengissamanburður þessa gjaldmiðla er þegar virkur'});
     } else if(maximumExceeded) {
       this.setState({ errorMessage: 'Of margir gengissamanburðir virkir, vinsamlegast fjarlægðu einn eða fleiri til að bæta við nýjum gengissamanburð'});
     } else {

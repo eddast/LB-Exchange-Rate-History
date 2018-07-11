@@ -2,6 +2,7 @@ import * as React from 'react';
 import LineChart from '../ui/LineChart';
 import AddCurrency from './AddCurrency';
 import CurrencyTable from '../ui/CurrencyTable';
+import GraphChip from '../ui/GraphChip';
 
 /**
  * LOGO COMPONENT: Displays banner and logo, credits to Landsbankinn
@@ -137,7 +138,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
         <div className="app-container">
           <Logo />
           <div className="graph-container">
-            <h3>Gjaldmiðlasamanburðir</h3>
+            <h3>Gjaldmiðlasamanburður</h3>
             <AddCurrency
               addGraph={(source: string, target: string, raiseError: any) => {
                 let today = new Date();
@@ -148,7 +149,17 @@ export default class HistoricalExchangeRates extends React.Component <Historical
               maximumExceeded={this.state.data.length-1 >= 14}
               currencies={this.state.currencyOptions}
             />
-            <p style={{ color: 'black' }}>//TODO setja chips hér</p>
+            <span className="graph-chips">
+              { this.state.activeComparions.map((comparisonID: any, idx: any) =>
+                <GraphChip
+                  key={idx}
+                  title={comparisonID}
+                  color={ this.state.colors[idx % this.state.colors.length] }
+                  last={this.state.activeComparions.length===1}
+                  onDelete={() => this.deleteGraph(idx)}
+                />
+              )}
+          </span>
             <p style={{ color: 'black' }}>//TODO velja tímabil</p>
             <h3>Gengisþróun samanburða</h3>
             <LineChart
