@@ -2,8 +2,7 @@ import * as React from 'react';
 
 /**
  * GRAPHCHIP COMPONENT
- * Deletes chosen exhange history entry from chart
- * and shows color
+ * Deletes chosen exhange history entry from chart and shows color
  */
 interface GraphChipState {
   shrink: boolean;        /* true if chip should shrink */
@@ -16,14 +15,20 @@ interface GraphChipProps {
   last: boolean;           /* true if chip is last of his kind */
 }
 class GraphChip extends React.Component <GraphChipProps, GraphChipState> {
-  private timeout: any = null;
 
+  private timeout: any = null; /* always store timeout to clear it on unmount */
+
+  /* initialize state */
   componentWillMount(): void {
     this.setState({ shrink: false });
   }
+
+  /* always clear potential timeout on unmount */
   componentWillUnmount(): void {
     clearTimeout(this.timeout);
   }
+
+  /* display a single chip that can delete data from graph */
   render(): JSX.Element {
     const { title, color, onDelete, last } = this.props;
     return (

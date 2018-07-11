@@ -5,16 +5,13 @@ import CurrencyTable from '../ui/CurrencyTable';
 import GraphChip from '../ui/GraphChip';
 import { colors } from '../resources/constants';
 
-/**
- * LOGO COMPONENT: Displays banner and logo, credits to Landsbankinn
- */
+/* LOGO FUNCTION: Returns SVG Landsbankinn logo (credits to Landsbankinn) */
 const Logo = (): JSX.Element => {
   return (
     <svg 
       width="34" 
       height="34" 
-      viewBox="0 0 34 34" 
-      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 34 34"
       style={{display: "block", marginLeft: "auto", marginRight: "auto" }}
     >
       <title>Landsbankinn</title>
@@ -29,6 +26,10 @@ const Logo = (): JSX.Element => {
   );
 };
 
+/**
+ * HISTORICALEXCHANGERATES COMPONENT
+ * Root component - plots all functionality of app
+ */
 interface HistoricalExchangeRatesProps {}
 interface HistoricalExchangeRatesState {
   data: any;
@@ -37,13 +38,9 @@ interface HistoricalExchangeRatesState {
   fatalError: boolean;
   activeComparions: string[];
 }
+export default class HistoricalExchangeRates extends React.Component <HistoricalExchangeRatesProps, HistoricalExchangeRatesState> {
 
-export default class HistoricalExchangeRates extends React.Component <HistoricalExchangeRatesProps, HistoricalExchangeRatesState> {	
-  
-  /**
-   * Initialize state and fetch currency options
-   * Fetch ISK-EUR as default on start
-   */
+  /* Initialize state and fetch currency options */
   componentWillMount(): void {
     const initialSourceCurrency = 'ISK', initialTargetCurrency = 'EUR';
     this.setState({
@@ -62,11 +59,12 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     });
     let today = new Date();
     let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-    this.addGraph(initialSourceCurrency, initialTargetCurrency, sixMonthsBefore, today, ((success: boolean) => {
+    this.addComparison(initialSourceCurrency, initialTargetCurrency, sixMonthsBefore, today, ((success: boolean) => {
       if(!success) { this.setState({ fatalError: true}); }
     }));
   }
 
+  /* resets color pallette when comparison cross is deleted */
   pushBackColor(colorIdx: number): void {
     const color = this.state.colors[colorIdx];
 		this.state.colors.splice(colorIdx, 1);
@@ -75,14 +73,12 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     this.setState({ colors: newColors });
 	}
 
-  /**
-   * Adds a new graph to line chart for souce and target currency for a given peroid range (from-to)
-   */
-  addGraph(sourceCurrencyID: string, destCurrencyID: string, dateFrom: Date, dateTo: Date, cb: any){
+  /* adds a new comparison with specified source and target currency for a given peroid range (from-to) */
+  addComparison(sourceCurrencyID: string, targetCurrencyID: string, dateFrom: Date, dateTo: Date, cb: any){
     fetch(
       'https://api.landsbankinn.is/Securities/Currencies/v2/'
       + 'Currencies/' + sourceCurrencyID
-      + '/Rates/' + destCurrencyID + '/History?'
+      + '/Rates/' + targetCurrencyID + '/History?'
       + 'source=general&from=' + this.toDateStr(dateFrom)
       + '&to=' + this.toDateStr(dateTo),
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
@@ -95,23 +91,19 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     }).then(newGraphData => {
       if(newGraphData !== null) {
         this.state.data.push(newGraphData);
-        this.state.activeComparions.push(sourceCurrencyID+'-'+destCurrencyID)
+        this.state.activeComparions.push(sourceCurrencyID+'-'+targetCurrencyID)
         let newData = this.state.data;
         this.setState({ data: newData });
       }
     });
   }
 
-  /**
-   * Returns parameter date in a YYYY-MM-DD format
-   */
+  /* Returns parameter date in a YYYY-MM-DD format */
   toDateStr(date: Date): string {
     return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   }
 
-  /**
-   * Deletes a subgraph from the line chart
-   */
+  /* Deletes a subgraph from the line chart */
   deleteGraph(graphIdx: number): void {
     this.state.data.splice(graphIdx, 1);
     this.state.activeComparions.splice(graphIdx, 1);
@@ -120,8 +112,9 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     this.pushBackColor(graphIdx);
   }
   
-  /* Render data */
+  /* Render app */
   render(): JSX.Element {
+    /* error check in case of fatal error (:= unable to communicate with API) */
     if (this.state.fatalError) {
       return(
       <div className="app-container">
@@ -132,6 +125,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
         </div>
       </div>
       );
+    /* render data if at least one comparison has been fetched to be displayed */
     } else if (this.state.currencyOptions !== null && this.state.data.length !== 0) {
       return (
         <div className="app-container">
@@ -139,10 +133,10 @@ export default class HistoricalExchangeRates extends React.Component <Historical
           <div className="graph-container">
             <h3>Gjaldmiðlasamanburður</h3>
             <AddCurrency
-              addGraph={(source: string, target: string, raiseError: any) => {
+              addComparison={(source: string, target: string, raiseError: any) => {
                 let today = new Date();
                 let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-                this.addGraph(source, target, sixMonthsBefore, today, raiseError);
+                this.addComparison(source, target, sixMonthsBefore, today, raiseError);
               }}
               activeComparions={this.state.activeComparions}
               maximumExceeded={this.state.data.length-1 >= 14}
@@ -173,6 +167,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
           </div>
         </div>
       );
+    /* return loading state */
     } else {
       return (
         <div className="app-container">
