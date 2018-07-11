@@ -66,8 +66,6 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
     });
   }
   sortByColumn(a: any, colID: number) {
-    console.log(a);
-    console.log(colID);
     this.state.toggle ?
       a.sort(comparatorFunc) :
       a.sort(comparatorFunc).reverse();

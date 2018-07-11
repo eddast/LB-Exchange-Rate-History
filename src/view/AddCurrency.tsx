@@ -1,20 +1,24 @@
 import * as React from 'react';
 
+/**
+ * ADDCURRENCY COMPONENT
+ * Sets up options to add comparison cross
+ */
 interface AddCurrencyProps {
-  maximumExceeded: boolean; 
-  currencies: any;
-  addGraph: any;
-  activeComparions: any;
+  maximumExceeded: boolean;   /* true if user has selected too many comparison crosses */
+  currencies: any;            /* currencies available for comparison */
+  addComparison: any;         /* adds comparison cross to data */
+  activeComparions: any;      /* all currently active comparison crosses */
 }
 interface AddCurrencyState {
-  sourceCurrency: any;
-  destCurrency: any;
-  errorMessage: any;
-  isAdding: boolean;
+  sourceCurrency: any;        /* current selected currency for source */
+  targetCurrency: any;        /* current selected currency for target */
+  errorMessage: any;          /* potential error message to guide user */
+  isAdding: boolean;          /* true if comparison is being added */
 }
-
 export default class AddCurrency extends React.Component <AddCurrencyProps, AddCurrencyState> {
 
+  /* initialize state */
   componentWillMount(): void {
     const { currencies } = this.props;
     let sourceCurrency = currencies[0];
@@ -26,19 +30,21 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
     }
     this.setState({
       sourceCurrency: sourceCurrency,
-      destCurrency: '',
+      targetCurrency: '',
       errorMessage: '',
       isAdding: false
     });
   }
-  addCurrency(): void {
-    const { sourceCurrency, destCurrency } = this.state;
+
+  /* adds comparison cross based on selected currencies, displays error if appropriate */
+  addComparisonCross(): void {
+    const { sourceCurrency, targetCurrency } = this.state;
     const compCrossValid = this.invalidSelect();
     if (compCrossValid.error) {
       this.setState({ errorMessage: compCrossValid.reasonPhrase});
     } else {
       this.setState({ errorMessage: '', isAdding: true});
-      this.props.addGraph(sourceCurrency, destCurrency, ((success: boolean, status: number) => {
+      this.props.addComparison(sourceCurrency, targetCurrency, ((success: boolean, status: number) => {
         if(!success) {
           this.setState({
             errorMessage: status === 404 ?
@@ -50,20 +56,22 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
       }));
     }
   }
+
+  /* returns object with raised error and error reason if user's selection for comparison is invalid */
   invalidSelect(): any {
-    const { sourceCurrency, destCurrency } = this.state;
+    const { sourceCurrency, targetCurrency } = this.state;
     const { maximumExceeded } = this.props;
-    if (sourceCurrency === destCurrency ) {
+    if (sourceCurrency === targetCurrency ) {
       return {
         error: true,
         reasonPhrase: 'Vinsamlegast veldu mismunandi gjaldmiðla í báða reiti'
       };
-    } else if (destCurrency === '') {
+    } else if (targetCurrency === '') {
       return {
         error: true,
         reasonPhrase: 'Vinsamlegast veldu gjaldmiðil í báða reiti'
       };
-    } else if (this.props.activeComparions.includes(sourceCurrency+'-'+destCurrency)) {
+    } else if (this.props.activeComparions.includes(sourceCurrency+'-'+targetCurrency)) {
       return {
         error: true,
         reasonPhrase: 'Samanburður þessa gjaldmiðla þegar valinn'
@@ -79,6 +87,8 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
       }
     }
   }
+  
+  /* render comparison crosses add options */
   render(): JSX.Element {
     const { currencies } = this.props;
     const error = this.invalidSelect().error;
@@ -101,8 +111,8 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
             className='currency-select'
             id='target-currency'
             onClick={() => this.setState({ errorMessage: ''})}
-            value={this.state.destCurrency}
-            onChange={(e: any) => this.setState({destCurrency: e.target.value}) }
+            value={this.state.targetCurrency}
+            onChange={(e: any) => this.setState({targetCurrency: e.target.value}) }
           >
             <option value={''}>Veldu mynt</option>
             { currencies.map((currency: any, i: any) =>
@@ -115,7 +125,7 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
             <div
               className="small-gray-btn"
               style={{ backgroundColor:  error ? '' : '#194262', color: error ? '' : 'white', padding: '5px'}}
-              onClick={() => this.addCurrency()}
+              onClick={() => this.addComparisonCross()}
             >
               +
             </div>

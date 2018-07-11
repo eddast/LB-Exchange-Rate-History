@@ -42,19 +42,19 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
     });
   }
 
+	/* gets milliseconds between two dates */
   getDateDifference(first: string, second: string) {
     return new Date(first).getTime() - new Date(second).getTime();
   }
 
+	/* converts milliseconds to days */
   calculateDaysFromMilliseconds(pts: any): number {
     const ms = this.getDateDifference(pts[pts.length - 1].date, pts[0].date);
     return ms / 86400000;
   }
 
-  longerThanDay(time: number): boolean {
-    console.log(time);
-    return time > 86400000;
-  }
+	/* returns true if time is longer than one day */
+  longerThanDay(time: number): boolean { return time > 86400000; }
 
   /* Plot chart */
   render(): JSX.Element {
@@ -90,20 +90,16 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
           x = ~~(prevX + (xInterval * 3)) + .5;
         } prevX = x; prevDate = pt.date;
         return ({
-          x,                                                                /* x coordinate of point in graph */
-          y: ~~((heightRatio) * (maxValue - pt.mid) + padding) + .5,		    /* y coordinate of point in graph */
-          value: pt,																										    /* value point holds */
-          color: this.props.colors[datasetIndex % this.props.colors.length]	/* color assigned to point (and dataset) */
+					/* x coordinate of point in graph */ x,                                                        
+					/* y coordinate of point in graph */ y: ~~((heightRatio) * (maxValue - pt.mid) + padding) + .5,
+					/* value point holds */ value: pt,
+					/* color assigned to point (and dataset) */ color: this.props.colors[datasetIndex % this.props.colors.length]
         })
       }
       )
     });
 
-    /**
-     * PLOT LINECHART
-     * Plot axis from data's maximum values
-     * For each data set, plot it's points and lines between it on graph
-     */
+    /* Plot linechart */
     return (
       <span className="rate-history-chart" style={{ width: width + 2 * padding }}>
         <svg
@@ -159,12 +155,9 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
 };
 
 
-/**
- * TOOLTIP COMPONENT
- * Displays a tooltip at a set coordinate
- */
+/* TOOLTIP FUNCTION: Displays a tooltip at a set coordinate */
 interface TooltipProps {
-  point: any;				/* point value tooltip displays, it's coordinates and color */
+  point: any;				/* point tooltip displays */
 }
 const Tooltip = ({ point }: TooltipProps) => {
   const { value } = point;
@@ -181,10 +174,7 @@ const Tooltip = ({ point }: TooltipProps) => {
   );
 };
 
-/**
- * YAXIS COMPONENT
- * Plots Y Axis for line chart
- */
+/* YAXIS FUNCTION: plots y-axis for line chart */
 interface YAxisProps {
   padding: number;							/* padding of linechart in px */
   height: number;								/* linechart height in px */
@@ -229,14 +219,10 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
       </g>
     );
   }
-
   return <g>{axis}</g>;
 }
 
-/**
- * XAXIS COMPONENT
- * Plots X Axis for line chart
- */
+/* XAXIS FUNCTION: plots x-axis for line chart */
 interface XAxisProps {
   padding: number;							/* padding of linechart in px */
   height: number;								/* linechart height in px */
@@ -285,15 +271,11 @@ const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
       </g>
     );
   }
-
   return <g>{yaxis}</g>
 };
 
 
-/**
- * POINTS COMPONENT
- * Plots all points for a all graph datasets in graph
- */
+/* POINTS FUNCTION: plots all points for a all graph datasets in graph */
 interface PointsProps {
   points: any;							/* all points of dataset */
   dataSetIndex: number;			/* index of current dataset in graph */
@@ -314,10 +296,7 @@ const Points = ({ points, dataSetIndex, showTooltip, hideTooltip }: PointsProps)
   );
 };
 
-/**
- * LINES COMPONENT
- * Plots lines between correct points in graph
- */
+/* LINES FUNCTION: plots lines between correct points in graph */
 interface LinesProps {
   points: any;									/* points in graph */
   dataSetIndex: number;					/* index number for dataset*/

@@ -1,5 +1,6 @@
 /**
- * CONSTANTS
+ * RESOURCES
+ * Constants
  * */
 const monthID: string[] = [ 'jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des' ];
 const months: string[] = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember' ];
