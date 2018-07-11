@@ -39,10 +39,10 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
 			});
 			const tableEntry = {
         currencies: pts[0].baseCurrency + '-' + pts[0].quoteCurrency,
-				initialMid: pts[0].mid.toFixed(4),
-				endMid: pts[pts.length-1].mid.toFixed(4),
-				lowestMid: currentLowestMid.toFixed(4),
-        highestMid: currentHighestMid.toFixed(4),
+				initialMid: parseFloat(pts[0].mid),
+				endMid: parseFloat(pts[pts.length-1].mid.toFixed(4)),
+				lowestMid: parseFloat(currentLowestMid.toFixed(4)),
+        highestMid: parseFloat(currentHighestMid.toFixed(4)),
         color: colors[i % colors.length]
 			}
 			tableEntries.push(tableEntry);
@@ -111,7 +111,7 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
         </thead>
         <tbody>
           {this.state.data.map(function(entry: any, i: number) {
-            const changePercentage = (((entry.endMid - entry.initialMid)/entry.endMid)*100).toFixed(2);
+            const changePercentage: number = (((entry.endMid - entry.initialMid)/entry.endMid)*100);
             return (
               <tr key={i}>
                 <td><div className="graph-chip-color" style={{ backgroundColor: entry.color }}/></td>
@@ -120,7 +120,7 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
                 <td>{entry.endMid}</td>
                 <td>{entry.lowestMid}</td>
                 <td>{entry.highestMid}</td>
-                <td style={{ color: changePercentage[0] === '-' ? 'red' : 'green' }}>{changePercentage}%</td>
+                <td style={{ color: changePercentage < 0 ? 'red' : 'green' }}>{parseFloat(changePercentage.toFixed(3))}%</td>
               </tr>
             );
           })}

@@ -178,7 +178,7 @@ const Tooltip = ({ point }: TooltipProps) => {
   return (
 		<span
 			className="rate-history-chart--tooltip"
-			style={{ textAlign: 'center', color: point.color, left: ~~point.x, top: ~~point.y+20 }}
+			style={{ textAlign: 'center', color: point.color, left: ~~point.x, top: ~~point.y-10 }}
 		>
 			<p><strong>{value.baseCurrency}-{value.quoteCurrency}</strong></p>
 			<p>{date.getDate()}. {months[date.getMonth()]} {date.getFullYear()}</p>
