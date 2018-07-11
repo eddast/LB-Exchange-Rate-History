@@ -13,6 +13,13 @@ interface CurrencyTableState {
 }
 
 export default class CurrencyTable extends React.Component <CurrencyTableProps, CurrencyTableState> {	
+  // private dataTargetTitles: any = {
+  //   initialMid: 'Upphaf',
+  //   endMid: 'Endir',
+  //   lowestMid: 'Lægst',
+  //   highestMid: 'Hæst',
+  //   changePercentage: 'Heildarbreyting (%)'
+  // };
   componentWillMount(): void {
     this.setState({
       data: this.getDataValues(),
@@ -52,28 +59,20 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
     return tableEntries;
   }
   handleClick(colDataTarget: any): void {
-    if (this.state.sortedColumn === colDataTarget) {
-      this.setState({
-        toggle: !this.state.toggle,
-        sortedColumn: colDataTarget,
-        rows: this.sortByColumn(this.state.data, colDataTarget)
-      })
-    } else {
-      this.setState({
-        sortedColumn: colDataTarget,
-        rows: this.sortByColumn(this.state.data, colDataTarget)
-      })
-    }
+    this.setState({
+      toggle: this.state.sortedColumn === colDataTarget ? !this.state.toggle : false,
+      sortedColumn: colDataTarget,
+      rows: this.sortByColumn(this.state.data, colDataTarget)
+    });
   }
   sortByColumn(a: any, colID: number) {
-    if (this.state.toggle) {
-      a.sort(sortFunction);
-    } else {
-      a.sort(sortFunction).reverse();
-    }
-    function sortFunction(a: any, b: any) {
-      const rhs = parseInt(a[colID], 10);
-      const lhs = parseInt(b[colID], 10);
+    console.log(a);
+    console.log(colID);
+    this.state.toggle ?
+      a.sort(comparatorFunc) :
+      a.sort(comparatorFunc).reverse();
+    function comparatorFunc(a: any, b: any) {
+      const rhs = parseFloat(a[colID]), lhs = parseFloat(b[colID]);
       return rhs === lhs ? 0 : rhs < lhs ? -1 : 1;
     }
     return a;
@@ -89,6 +88,7 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
                Upphaf
                {(this.state.sortedColumn === 'initialMid') ? (this.state.toggle) ? " ↓": " ↑" : <span className="indicate-sort"> ↑</span>}
               </th>
+
               <th onClick={() => this.handleClick('endMid')}>
                Endir
                {(this.state.sortedColumn === 'endMid') ? (this.state.toggle) ? " ↓": " ↑" : <span className="indicate-sort"> ↑</span>}
