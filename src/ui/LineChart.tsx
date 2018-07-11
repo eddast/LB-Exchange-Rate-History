@@ -3,13 +3,9 @@ import GraphChip from './GraphChip';
 
 /**
  * CONSTANTS
- * (Colors picked from open source MaterialUI pallette: https://material-ui.com/style/color/)
  * */
 const monthID = [ 'jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des' ];
 const months = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember' ];
-let colors = [ '#194262', '#E91E63', '#4CAF50', '#009688', '#FF5722', '#607D8B', '#263238', '#F44336', '#2196F3', '#90A4AE', '#673AB7', '#3F51B5', '#FF5722', '#FF5722', '#9C27B0', '#FFEB3B', '#CDDC39', '#8BC34A'];
-const transparent = '#FFFFFF00';
-const lightGray = '#EAEAEA';
 
 
 /**
@@ -19,6 +15,7 @@ const lightGray = '#EAEAEA';
 interface LineChartProps {
   data: any;							/* Data to plot in chart */
 	deleteGraph: any;				/* function; executed when user deletes sub graph from chart */
+  colors: any;						/* the color pallette which chips and graph use to identify graph*/
 }
 interface LineChartState {
   tooltip: boolean;				/* True if tooltip is to be displayed for point */
@@ -51,11 +48,6 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 			tooltipPoint: point,
 		});
 	}
-
-	pushBackColor(color: string, colorIdx: number): void {
-		colors.splice(colorIdx, 1);
-		colors.push(color);
-	}
 	
 	/* Plot chart */
 	render(): JSX.Element {
@@ -87,7 +79,7 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 				x: ~~((width / size) * pi + padding) + .5,										/* x coordinate of point in graph */
 				y: ~~((heightRatio) * (maxValue - pt.mid) + padding) + .5,		/* y coordinate of point in graph */
 				value: pt,																										/* value point holds */
-				color: colors[datasetIndex % colors.length]										/* color assigned to point (and dataset) */
+				color: this.props.colors[datasetIndex % this.props.colors.length]										/* color assigned to point (and dataset) */
 			})		
 		));
 		
@@ -103,12 +95,9 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 					<GraphChip
 						key={graphIdx}
 						title={comparisonGraph[0].value.baseCurrency + '-' + comparisonGraph[0].value.quoteCurrency}
-						color={ colors[graphIdx % colors.length] }
+						color={ this.props.colors[graphIdx % this.props.colors.length] }
 						last={dataSet.length===1}
-						onDelete={() => {
-							this.pushBackColor( colors[graphIdx % colors.length], (graphIdx % colors.length));
-							this.props.deleteGraph(graphIdx);
-						}}
+						onDelete={() => this.props.deleteGraph(graphIdx)}
 					/>
 				)}
 			</span>
@@ -141,7 +130,7 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 									width={ width }
 									height={ height }
 									padding={ padding }
-									color={ colors[graphIdx % colors.length] }
+									color={ this.props.colors[graphIdx % this.props.colors.length] }
 									updating={ this.state.updating }
 								/>
 								<Points
@@ -221,7 +210,7 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
 					y1={ y }
 					x2={ width + padding }
 					y2={ y }
-					stroke={lightGray}
+					stroke={'#EAEAEA'}
 					strokeWidth='1px'
 				/>
 				<text
@@ -230,7 +219,6 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
 					y={ y + 2 }
 					textAnchor="end"
 				>
-					{/* {~~(maxValue / (numAxis-1)) * ((numAxis-1) - i)} */}
 					{intervals[i].toFixed(2)}
 				</text>
 			</g>
@@ -393,7 +381,7 @@ class Point extends React.Component <PointProps, PointState> {
         cx={point.x}
         cy={point.y}
         fill={this.state.show ? point.color : 'none'}
-        stroke={transparent}
+        stroke={'#FFFFFF00'}
         onMouseEnter={() => this.showInfo()}
         onMouseLeave={() => this.hideInfo()}
       />

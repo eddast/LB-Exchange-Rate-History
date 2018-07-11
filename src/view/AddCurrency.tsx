@@ -4,6 +4,7 @@ interface AddCurrencyProps {
   maximumExceeded: boolean;
   currencies: any;
   addGraph: any;
+  activeComparions: any;
 }
 interface AddCurrencyState {
   sourceCurrency: any;
@@ -37,9 +38,11 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
       this.setState({ errorMessage: 'Vinsamlegast veldu mismunandi gjaldmiðla í báða reiti'});
     } else if (destCurrency === '') {
       this.setState({ errorMessage: 'Vinsamlegast veldu gjaldmiðil í báða reiti'});
+    } else if (this.props.activeComparions.includes(destCurrency+'-'+sourceCurrency)) {
+      this.setState({ errorMessage: 'gengissamanburður þessa gjaldmiðla er þegar virkur'});
     } else if(maximumExceeded) {
       this.setState({ errorMessage: 'Of margir gengissamanburðir virkir, vinsamlegast fjarlægðu einn eða fleiri til að bæta við nýjum gengissamanburð'});
-    }else {
+    } else {
       this.setState({ errorMessage: ' ', isAdding: true});
       this.props.addGraph(sourceCurrency, destCurrency, ((success: boolean, status: number) => {
         if(!success) {

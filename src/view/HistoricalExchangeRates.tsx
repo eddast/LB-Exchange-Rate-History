@@ -32,10 +32,13 @@ interface HistoricalExchangeRatesState {
   data: any;
   currencyOptions: any;
   fatalError: boolean;
+  activeComparions: string[];
 }
 
 export default class HistoricalExchangeRates extends React.Component <HistoricalExchangeRatesProps, HistoricalExchangeRatesState> {	
   
+  private colors: any = [ '#194262', '#E91E63', '#4CAF50', '#009688', '#FF5722', '#607D8B', '#263238', '#F44336', '#2196F3', '#90A4AE', '#673AB7', '#3F51B5', '#FF5722', '#FF5722', '#9C27B0', '#FFEB3B', '#CDDC39', '#8BC34A'];
+
   /**
    * Initialize state and fetch currency options
    * Fetch ISK-EUR as default on start
@@ -45,7 +48,8 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     this.setState({
       data: [],
       currencyOptions: null,
-      fatalError: false
+      fatalError: false,
+      activeComparions: []
     });
     fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
@@ -60,6 +64,12 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       if(!success) { this.setState({ fatalError: true}); }
     }));
   }
+
+  pushBackColor(colorIdx: number): void {
+    const color = this.colors[colorIdx];
+		this.colors.splice(colorIdx, 1);
+		this.colors.push(color);
+	}
 
   /**
    * Adds a new graph to line chart for souce and target currency for a given peroid range (from-to)
@@ -81,6 +91,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     }).then(newGraphData => {
       if(newGraphData !== null) {
         this.state.data.push(newGraphData);
+        this.state.activeComparions.push(destCurrencyID+'-'+sourceCurrencyID)
         let newData = this.state.data;
         this.setState({ data: newData });
       }
@@ -99,8 +110,10 @@ export default class HistoricalExchangeRates extends React.Component <Historical
    */
   deleteGraph(graphIdx: number): void {
     this.state.data.splice(graphIdx, 1);
-    let newData = this.state.data;
-    this.setState({ data: newData });
+    this.state.activeComparions.splice(graphIdx, 1);
+    let newData = this.state.data; let newComparisons = this.state.activeComparions;
+    this.setState({ data: newData, activeComparions: newComparisons});
+    this.pushBackColor(graphIdx);
   }
   
   /* Render data */
@@ -128,14 +141,20 @@ export default class HistoricalExchangeRates extends React.Component <Historical
                 let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
                 this.addGraph(source, target, sixMonthsBefore, today, raiseError);
               }}
+              activeComparions={this.state.activeComparions}
               maximumExceeded={this.state.data.length-1 >= 14}
               currencies={this.state.currencyOptions}
             />
             <LineChart
               data={this.state.data}
+              colors={this.colors}
               deleteGraph={(graphIdx: number) => this.deleteGraph(graphIdx)}
             />
-            <CurrencyTable data={this.state.data}/>
+            <CurrencyTable
+              data={this.state.data}
+              colors={this.colors}
+              deleteComparison={(graphIdx: number) => this.deleteGraph(graphIdx)}
+            />
           </div>
         </div>
       );

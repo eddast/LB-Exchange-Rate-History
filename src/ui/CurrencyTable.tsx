@@ -1,8 +1,9 @@
 import * as React from 'react';
-let colors = [ '#194262', '#E91E63', '#4CAF50', '#009688', '#FF5722', '#607D8B', '#263238', '#F44336', '#2196F3', '#90A4AE', '#673AB7', '#3F51B5', '#FF5722', '#FF5722', '#9C27B0', '#FFEB3B', '#CDDC39', '#8BC34A'];
 
 interface CurrencyTableProps {
   data: any;
+  deleteComparison: any;
+  colors: any;
 }
 interface CurrencyTableState {
   data: any;
@@ -38,12 +39,13 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
 				currentSum = currentSum + p.mid;
 			});
 			const tableEntry = {
+        id: i,
         currencies: pts[0].baseCurrency + '-' + pts[0].quoteCurrency,
 				initialMid: parseFloat(pts[0].mid),
 				endMid: parseFloat(pts[pts.length-1].mid.toFixed(4)),
 				lowestMid: parseFloat(currentLowestMid.toFixed(4)),
         highestMid: parseFloat(currentHighestMid.toFixed(4)),
-        color: colors[i % colors.length]
+        color: this.props.colors[i % this.props.colors.length]
 			}
 			tableEntries.push(tableEntry);
     }); 
@@ -107,20 +109,30 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
                Heildarbreyting
                {(this.state.activeColumn === 'Heildarbreyting') ? (this.state.toggle) ? " ↓": " ↑" : <span className="indicate-sort"> ↑</span>}
               </th>
+              <th/>
           </tr>
         </thead>
         <tbody>
-          {this.state.data.map(function(entry: any, i: number) {
+          {this.state.data.map((entry: any, i: number) => {
             const changePercentage: number = (((entry.endMid - entry.initialMid)/entry.endMid)*100);
             return (
               <tr key={i}>
-                <td><div className="graph-chip-color" style={{ backgroundColor: entry.color }}/></td>
+                <td><div className="graph-color graph-color-small" style={{ backgroundColor: entry.color }}/></td>
                 <td><strong>{entry.currencies}</strong></td>
                 <td>{entry.initialMid}</td>
                 <td>{entry.endMid}</td>
                 <td>{entry.lowestMid}</td>
                 <td>{entry.highestMid}</td>
                 <td style={{ color: changePercentage < 0 ? 'red' : 'green' }}>{parseFloat(changePercentage.toFixed(3))}%</td>
+                {this.state.data.length > 1 ?
+                <td>
+                  <div
+                    className="small-gray-btn"
+                    onClick={() => { this.props.deleteComparison(i)}}
+                  >
+                    x
+                  </div>
+              </td>: null}
               </tr>
             );
           })}

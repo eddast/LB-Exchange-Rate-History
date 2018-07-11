@@ -28,12 +28,12 @@ class GraphChip extends React.Component <GraphChipProps, GraphChipState> {
     const { title, color, onDelete, last } = this.props;
     return (
       <div className="graph-chip" style={{ width: this.state.shrink ? 0 : '85px', color: this.state.shrink ? '#e0e0e0' : '#383131' }}>
-        <div className="graph-chip-color" style={{ backgroundColor: color }}/>
+        <div className="graph-color graph-color-large" style={{ backgroundColor: color }}/>
         { title }
         {!last ?
         <div
           className="small-gray-btn"
-          onClick={() => { this.setState({ shrink: true }); this.timeout = setTimeout(() => { onDelete(); this.setState({shrink: false}) }, 200)}}
+          onClick={() => { this.setState({ shrink: true }); this.timeout = setTimeout(() => { onDelete(); this.setState({shrink: false}) }, 100)}}
         >
           x
         </div>: null}

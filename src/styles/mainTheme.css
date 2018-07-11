@@ -184,8 +184,8 @@ html, body, #root {
   font-size: 11px;
   color: #383131;
   overflow: hidden;
-  transition: width .2s ease-in-out;
-  transition: all .2s ease-in-out;
+  transition: width .15s ease-in-out;
+  white-space: nowrap;
 }
 .graph-chips {
   margin-top: 20px;
@@ -214,18 +214,24 @@ html, body, #root {
   color: #ffffff8a;
   cursor: pointer;
 }
-.graph-chip-color {
+.graph-color {
   display: block;
   float: left;
-  width: 25px;
-  height: 25px;
   border-radius: 50%;
   text-align: center;
   color: white;
   margin: 0 8px 0 -12px;
   opacity: .65;
 }
-
+.graph-color-large{
+  width: 25px;
+  height: 25px;
+}
+.graph-color-small{
+  width: 10px;
+  height: 10px;
+  margin: 0;
+}
 /** CURRENCY TABLE **/
 .currency-table { 
   max-width: 50rem;
