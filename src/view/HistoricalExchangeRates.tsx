@@ -5,7 +5,7 @@ import CurrencyTable from '../ui/CurrencyTable';
 import GraphChip from '../ui/GraphChip';
 import { colors } from '../resources/constants';
 
-/* Returns SVG Landsbankinn logo, credits to Landsbankinn */
+/* LOGO FUNCTION: Returns SVG Landsbankinn logo (credits to Landsbankinn) */
 const Logo = (): JSX.Element => {
   return (
     <svg 
@@ -114,6 +114,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
   
   /* Render app */
   render(): JSX.Element {
+    /* error check in case of fatal error (:= unable to communicate with API) */
     if (this.state.fatalError) {
       return(
       <div className="app-container">
@@ -124,6 +125,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
         </div>
       </div>
       );
+    /* render data if at least one comparison has been fetched to be displayed */
     } else if (this.state.currencyOptions !== null && this.state.data.length !== 0) {
       return (
         <div className="app-container">
@@ -165,6 +167,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
           </div>
         </div>
       );
+    /* return loading state */
     } else {
       return (
         <div className="app-container">
