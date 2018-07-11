@@ -22,9 +22,8 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
   }
   componentDidUpdate(prevProps: CurrencyTableProps) {
     if(this.props !== prevProps) {
-      this.setState({ data: this.getDataValues()}, () => {
-        this.sortByColumn(this.state.data, this.state.sortedColumn)
-
+      this.setState({ data: this.getDataValues(), toggle: !this.state.toggle}, () => {
+        this.handleClick(this.state.sortedColumn)
       });
     }
   }
@@ -52,17 +51,17 @@ export default class CurrencyTable extends React.Component <CurrencyTableProps, 
     }); 
     return tableEntries;
   }
-  handleClick(title: any): void {
-    if (this.state.sortedColumn === title) {
+  handleClick(colDataTarget: any): void {
+    if (this.state.sortedColumn === colDataTarget) {
       this.setState({
         toggle: !this.state.toggle,
-        sortedColumn: title,
-        rows: this.sortByColumn(this.state.data, title)
+        sortedColumn: colDataTarget,
+        rows: this.sortByColumn(this.state.data, colDataTarget)
       })
     } else {
       this.setState({
-        sortedColumn: title,
-        rows: this.sortByColumn(this.state.data, title)
+        sortedColumn: colDataTarget,
+        rows: this.sortByColumn(this.state.data, colDataTarget)
       })
     }
   }
