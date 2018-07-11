@@ -5,7 +5,7 @@ import AddCurrency from './AddCurrency';
 /**
  * LOGO COMPONENT: Displays banner and logo, credits to Landsbankinn
  */
-const Logo = () => {
+const Logo = (): JSX.Element => {
   return (
     <svg 
       width="34" 

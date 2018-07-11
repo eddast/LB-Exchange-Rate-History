@@ -265,8 +265,6 @@ const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
 		intervals.push(day);
 	}
 	intervals.push(maxDate);
-	
-	console.log(intervals);
 
 	/* set up all axis */
 	for (let i = 0; i < numAxis; i++) {

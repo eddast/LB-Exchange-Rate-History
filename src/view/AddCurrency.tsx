@@ -26,7 +26,7 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
       sourceCurrency: sourceCurrency,
       destCurrency: '',
       errorMessage: ''
-    }, () => {console.log(this.state.destCurrency)})
+    });
   }
   addCurrency(): void {
     const { sourceCurrency, destCurrency } = this.state;
@@ -50,6 +50,7 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
         <select
           className='currency-select'
           id='target-currency'
+          value={this.state.destCurrency}
           onChange={(e: any) => this.setState({destCurrency: e.target.value}) }
         >
           <option value={''}>Veldu mynt</option>
@@ -61,10 +62,11 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
         <select
           className='currency-select'
           id='source-currency'
+          value={this.state.sourceCurrency}
           onChange={(e: any) => this.setState({sourceCurrency: e.target.value}) }
         >
           { currencies.map((currency: any, i: any) =>
-            <option selected={currency.id === 'ISK' ? true : false} key={i} value={currency.id}>{currency.id}: {currency.name}</option>
+            <option key={i} value={currency.id}>{currency.id}: {currency.name}</option>
 					)} 
         </select>
         <div className="small-gray-btn" onClick={() => this.addCurrency()}>+</div>
