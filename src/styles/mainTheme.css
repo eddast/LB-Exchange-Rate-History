@@ -4,7 +4,6 @@ html, body, #root {
   font-family: Roboto;
   background-color: #194262;
   color: white;
-  overflow-x: hidden;
 }
 .app-container{
   display: flex;
@@ -17,6 +16,9 @@ html, body, #root {
   margin-top: 20px;
   width: 80%;
   overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 @media screen and (max-width: 960px) {
   .graph-container {
@@ -30,16 +32,13 @@ html, body, #root {
 }
 
 /** LOAD SPINNERS **/
-.loader {
-  display: inline-block;
-}
 .loader-large {
   width: 60px;
   height: 60px;
 }
 .loader-small {
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
 }
 .loader:after {
   content: " ";
@@ -62,12 +61,8 @@ html, body, #root {
   border-color: #194262 transparent #194262 transparent;
 }
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0%    { transform: rotate(0deg);    }
+  100%  { transform: rotate(360deg);  }
 }
 
 
@@ -91,7 +86,7 @@ html, body, #root {
 .currency-select{
   border: 0 !important;
   height: 2.3em;
-  background: #f0dedee5;
+  background: #aaaaaa3f;
   overflow: hidden;
   border-radius: .25em;
   margin: 0;
@@ -231,3 +226,65 @@ html, body, #root {
   opacity: .65;
 }
 
+/** CURRENCY TABLE **/
+.currency-table { 
+  max-width: 50rem;
+  border-collapse: collapse;
+  padding: 0;
+  background-color: white;
+  color: black;
+  font-weight: lighter;
+  font-size: 12px;
+  margin: 30px 0;
+}
+.currency-table thead {
+  white-space: nowrap;
+  transition: all .2 ease-in-out;
+  border-bottom: 1px solid #194262;
+}
+.currency-table {
+  text-align: center;
+}
+.currency-table th:hover:not(:first-child) {
+  background-color: #01e1ff0c;
+  transition: all .2 ease-in-out;
+}
+.currency-table th, td {
+  padding: .7em;
+}
+.currency-table .indicate-sort {
+  opacity: 0;
+}
+.currency-table tr:hover .indicate-sort {
+  opacity: .3;
+  transition: all .2s ease-in-out;
+}
+/* responsive table
+@media screen and (max-width: 600px) {
+  .currency-table thead {
+    display: none;
+  }
+  .currency-table tbody {
+    background-color: #ddd;
+  }
+  .currency-table th, td {
+    padding: .5rem;
+    background-color: white;
+  }
+  .currency-table tr {
+    border-bottom: 1px solid #19426200;
+    display: block;
+    margin-bottom: .5em;
+  }
+  .currency-table td {
+    display: block;
+    text-align: right;
+    padding: 5px 30px;
+  }
+  .currency-table td:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bolder;
+    margin-right: 20px;
+  }
+} */

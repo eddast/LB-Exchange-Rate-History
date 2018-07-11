@@ -1,6 +1,7 @@
 import * as React from 'react';
 import LineChart from '../ui/LineChart';
 import AddCurrency from './AddCurrency';
+import CurrencyTable from '../ui/CurrencyTable';
 
 /**
  * LOGO COMPONENT: Displays banner and logo, credits to Landsbankinn
@@ -30,6 +31,7 @@ interface HistoricalExchangeRatesProps {}
 interface HistoricalExchangeRatesState {
   data: any;
   currencyOptions: any;
+  fatalError: boolean;
 }
 
 export default class HistoricalExchangeRates extends React.Component <HistoricalExchangeRatesProps, HistoricalExchangeRatesState> {	
@@ -39,9 +41,11 @@ export default class HistoricalExchangeRates extends React.Component <Historical
    * Fetch ISK-EUR as default on start
    */
   componentWillMount(): void {
+    const initialSourceCurrency = 'ISK', initialTargetCurrency = 'EUR';
     this.setState({
       data: [],
-      currencyOptions: null
+      currencyOptions: null,
+      fatalError: false
     });
     fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
@@ -52,7 +56,9 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     });
     let today = new Date();
     let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-    this.addGraph('ISK', 'EUR', sixMonthsBefore, today, () => {}); // TODO ERROR
+    this.addGraph(initialSourceCurrency, initialTargetCurrency, sixMonthsBefore, today, ((success: boolean) => {
+      if(!success) { this.setState({ fatalError: true}); }
+    }));
   }
 
   /**
@@ -99,11 +105,22 @@ export default class HistoricalExchangeRates extends React.Component <Historical
   
   /* Render data */
   render(): JSX.Element {
-    if(this.state.currencyOptions !== null && this.state.data.length !== 0) {
+    if (this.state.fatalError) {
+      return(
+      <div className="app-container">
+        <Logo />
+        <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
+        <div className="graph-container" style={{ textAlign: 'center', color: '#194262'}}>
+          <h3>Ekki tókst að ræsa kerfi</h3>
+          <p>Athugaðu tengingu og prófaðu að endurhlaða síðunni</p>
+        </div>
+      </div>
+      );
+    } else if (this.state.currencyOptions !== null && this.state.data.length !== 0) {
       return (
         <div className="app-container">
-          {/* <Logo />
-          <h1 className="main-heading">Gengisþróun gjaldmiðla</h1> */}
+          <Logo />
+          <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
           <div className="graph-container">
             <AddCurrency
               addGraph={(source: string, target: string, raiseError: any) => {
@@ -118,6 +135,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
               data={this.state.data}
               deleteGraph={(graphIdx: number) => this.deleteGraph(graphIdx)}
             />
+            <CurrencyTable data={this.state.data}/>
           </div>
         </div>
       );
@@ -126,8 +144,9 @@ export default class HistoricalExchangeRates extends React.Component <Historical
         <div className="app-container">
           <Logo />
           <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
-          <div className="graph-container">
-            <h3 style={{ textAlign: 'center', color: 'black'}}>Sæki gögn...</h3>
+          <div className="graph-container" style={{ textAlign: 'center', color: '#194262'}}>
+            <h3>Sæki gögn...</h3>
+            <div className="loader loader-large"/>
           </div>
         </div>
       );

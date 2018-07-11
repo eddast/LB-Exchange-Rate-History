@@ -72,12 +72,13 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 		let firstDataset = data[0], minDate = new Date(firstDataset[0].date), maxDate = new Date(firstDataset[0].date);
     dataSet = data.forEach((pts: any, i: number) => {
 			pts.map((p: any) => {
+				// Extract values for all datasets to construct graphs
 				p.mid > maxValue ? maxValue = p.mid : null;
 				p.mid < minValue ? minValue = p.mid : null;
 				const currDate = new Date(p.date);
 				currDate.getTime() > maxDate.getTime() ? maxDate = currDate : null;
 				currDate.getTime() < minDate.getTime() ? minDate = currDate : null;
-			})
+			});
 		}); heightRatio = maxValue === 0 ? 1 : height / (maxValue - minValue);
 
 		/* Setup data, calculate x and y coordinates and set color */
@@ -96,67 +97,68 @@ export default class LineChart extends React.Component <LineChartProps, LineChar
 	 * For each data set, plot it's points and lines between it on graph
 	 */
 	return (
-			<span className="rate-history-chart" style={{ width: width + 2*padding }}>
-				<span className="graph-chips">
-				
-					{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
-						<GraphChip
-							key={graphIdx}
-							title={comparisonGraph[0].value.baseCurrency + '-' + comparisonGraph[0].value.quoteCurrency}
-							color={ colors[graphIdx % colors.length] }
-							last={dataSet.length===1}
-							onDelete={() => {
-								this.pushBackColor( colors[graphIdx % colors.length], (graphIdx % colors.length));
-								this.props.deleteGraph(graphIdx);
-							}}
-						/>
-					)}
-				</span>
-				<svg
-					width={(width + padding * 2)+'px'}
-					height={(height + 2*padding)+'px'}
-				>
-					<g>
-						<XAxis
-							minDate={minDate}
-							maxDate={maxDate}
-							padding={padding}
-							width={width}
-							height={height}
-						/>
-						<YAxis
-							maxValue={maxValue}
-							minValue={minValue}
-							padding={padding}
-							width={width}
-							height={height}
-						/>
-					</g>
-					{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
-						<g key={ graphIdx }>
-							<Lines
-								points={ comparisonGraph }
-								dataSetIndex={ graphIdx }
-								width={ width }
-								height={ height }
-								padding={ padding }
-								color={ colors[graphIdx % colors.length] }
-								updating={ this.state.updating }
-							/>
-							<Points
-                points={ comparisonGraph }
-                dataSetIndex={ graphIdx }
-                showTooltip={ this.showTooltip }
-                hideTooltip={ () => this.setState({ tooltip: false }) }
-              />
-						</g>
-					)}
-				</svg>
-				{ this.state.tooltip ?
-					<Tooltip
-						point={this.state.tooltipPoint}
+		<span>
+			<span className="graph-chips">
+				{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
+					<GraphChip
+						key={graphIdx}
+						title={comparisonGraph[0].value.baseCurrency + '-' + comparisonGraph[0].value.quoteCurrency}
+						color={ colors[graphIdx % colors.length] }
+						last={dataSet.length===1}
+						onDelete={() => {
+							this.pushBackColor( colors[graphIdx % colors.length], (graphIdx % colors.length));
+							this.props.deleteGraph(graphIdx);
+						}}
 					/>
-				: null }
+				)}
+			</span>
+				<span className="rate-history-chart" style={{ width: width + 2*padding }}>
+					<svg
+						width={(width + padding * 2)+'px'}
+						height={(height + 2*padding)+'px'}
+					>
+						<g>
+							<XAxis
+								minDate={minDate}
+								maxDate={maxDate}
+								padding={padding}
+								width={width}
+								height={height}
+							/>
+							<YAxis
+								maxValue={maxValue}
+								minValue={minValue}
+								padding={padding}
+								width={width}
+								height={height}
+							/>
+						</g>
+						{ dataSet.map((comparisonGraph: any, graphIdx: any) =>
+							<g key={ graphIdx }>
+								<Lines
+									points={ comparisonGraph }
+									dataSetIndex={ graphIdx }
+									width={ width }
+									height={ height }
+									padding={ padding }
+									color={ colors[graphIdx % colors.length] }
+									updating={ this.state.updating }
+								/>
+								<Points
+									points={ comparisonGraph }
+									dataSetIndex={ graphIdx }
+									showTooltip={ this.showTooltip }
+									hideTooltip={ () => this.setState({ tooltip: false }) }
+								/>
+							</g>
+						)}
+					</svg>
+					{ this.state.tooltip ?
+						<Tooltip
+							point={this.state.tooltipPoint}
+						/>
+					: null }
+				</span>
 			</span>
 		);
 	}
