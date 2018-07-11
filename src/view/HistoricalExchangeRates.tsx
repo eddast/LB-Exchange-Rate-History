@@ -52,13 +52,13 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     });
     let today = new Date();
     let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-    this.addGraph('ISK', 'EUR', sixMonthsBefore, today );
+    this.addGraph('ISK', 'EUR', sixMonthsBefore, today, () => {}); // TODO ERROR
   }
 
   /**
    * Adds a new graph to line chart for souce and target currency for a given peroid range (from-to)
    */
-  addGraph(sourceCurrencyID: string, destCurrencyID: string, dateFrom: Date, dateTo: Date){
+  addGraph(sourceCurrencyID: string, destCurrencyID: string, dateFrom: Date, dateTo: Date, raiseError: any){
     fetch(
       'https://api.landsbankinn.is/Securities/Currencies/v2/'
       + 'Currencies/' + sourceCurrencyID
@@ -67,11 +67,17 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       + '&to=' + this.toDateStr(dateTo),
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
     ).then(results => {
+      if(!results.ok){
+        raiseError(results.status);
+        return null;
+      }
       return results.json();
     }).then(newGraphData => {
-      this.state.data.push(newGraphData);
-      let newData = this.state.data;
-      this.setState({ data: newData });
+      if(newGraphData !== null) {
+        this.state.data.push(newGraphData);
+        let newData = this.state.data;
+        this.setState({ data: newData });
+      }
     });
   }
 
@@ -96,21 +102,20 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     if(this.state.currencyOptions !== null && this.state.data.length !== 0) {
       return (
         <div className="app-container">
-          <Logo />
-          <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
+          {/* <Logo />
+          <h1 className="main-heading">Gengisþróun gjaldmiðla</h1> */}
           <div className="graph-container">
             <AddCurrency
-              addGraph={(source: string, target: string) => {
+              addGraph={(source: string, target: string, raiseError: any) => {
                 let today = new Date();
                 let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-                this.addGraph(source, target, sixMonthsBefore, today);
+                this.addGraph(source, target, sixMonthsBefore, today, raiseError);
               }}
               maximumExceeded={this.state.data.length-1 >= 14}
               currencies={this.state.currencyOptions}
             />
             <LineChart
               data={this.state.data}
-              axis={['October', 'November', 'December', 'January', 'February', 'Marsh']}
               deleteGraph={(graphIdx: number) => this.deleteGraph(graphIdx)}
             />
           </div>

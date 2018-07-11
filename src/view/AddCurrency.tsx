@@ -39,7 +39,13 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
       this.setState({ errorMessage: 'Of margir gengissamanburðir virkir, vinsamlegast fjarlægðu einn eða fleiri'});
     }else {
       this.setState({ errorMessage: ' '});
-      this.props.addGraph(sourceCurrency, destCurrency );
+      this.props.addGraph(sourceCurrency, destCurrency, ((status: any) => {
+        this.setState({
+          errorMessage: status === 404 ?
+          status + ': Samanburðargengisþróun fyrir valda gjaldmiðla finnst ekki í gagnagrunni' :
+          status + ': Eitthvað fór úrskeiðis við að sækja gögn úr gagnagrunni, vinsamlegast athugaðu tengingu'
+        });
+      }));
     }
   }
   render(): JSX.Element {

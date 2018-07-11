@@ -5,11 +5,11 @@ import GraphChip from './GraphChip';
  * CONSTANTS
  * (Colors picked from open source MaterialUI pallette: https://material-ui.com/style/color/)
  * */
+const monthID = [ 'jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des' ];
+const months = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember' ];
 let colors = [ '#194262', '#E91E63', '#4CAF50', '#009688', '#FF5722', '#607D8B', '#263238', '#F44336', '#2196F3', '#90A4AE', '#673AB7', '#3F51B5', '#FF5722', '#FF5722', '#9C27B0', '#FFEB3B', '#CDDC39', '#8BC34A'];
 const transparent = '#FFFFFF00';
 const lightGray = '#EAEAEA';
-const monthID = [ 'jan', 'feb', 'mars', 'apr', 'maí', 'jún', 'júl', 'ág', 'sept', 'okt', 'nóv', 'des' ];
-const months = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember' ];
 
 
 /**
@@ -18,7 +18,6 @@ const months = [ 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'jú
  */
 interface LineChartProps {
   data: any;							/* Data to plot in chart */
-	axis: any;							/* TODO: REMOVE */
 	deleteGraph: any;				/* function; executed when user deletes sub graph from chart */
 }
 interface LineChartState {
@@ -181,7 +180,7 @@ const Tooltip = ({ point }: TooltipProps) => {
 		>
 			<p><strong>{value.baseCurrency}-{value.quoteCurrency}</strong></p>
 			<p>{date.getDate()}. {months[date.getMonth()]} {date.getFullYear()}</p>
-			<p>Miðgengi: {value.mid}</p>
+			<p>Miðgengi: <strong>{value.mid}</strong></p>
     </span>
   );
 };
@@ -252,7 +251,7 @@ interface XAxisProps {
 }
 const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
 	let yaxis = [];										
-	const numAxis = 10;						/* number of axis */
+	const numAxis = 8;						/* number of axis */
 	height = height + padding;		/* height for chart */
 
 	/* set up axis */
@@ -274,10 +273,18 @@ const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
 				<text
 					className="rate-history-chart--axis"
 					x={x}
-					y={height + 15}
+					y={height + 25}
 					textAnchor="middle"
 				>
-					{ intervals[i].getDate() + '. ' + monthID[intervals[i].getMonth()] + ' ' + intervals[i].getFullYear()}
+					{intervals[i].getDate() + '. ' + monthID[intervals[i].getMonth()]}
+				</text>
+				<text
+					className="rate-history-chart--axis"
+					x={x}
+					y={height + 40}
+					textAnchor="middle"
+				>
+					{intervals[i].getFullYear()}
 				</text>
 
 			</g>
