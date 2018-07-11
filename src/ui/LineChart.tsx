@@ -178,10 +178,10 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
 	let axis = [];
 
 	/* get interval values */
-	const intervalStep = (maxValue - minValue) / numAxis;
+	const intervalStep = (maxValue - minValue) / (numAxis-1);
 	let intervals = [], currVal = maxValue;
 	intervals.push(maxValue);
-	for (let i = 1; i < numAxis; i++) {
+	for (let i = 1; i < numAxis-1; i++) {
 		currVal -= intervalStep;
 		intervals.push(currVal);
 	} intervals.push(minValue); 
@@ -205,7 +205,7 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
 					y={ y + 2 }
 					textAnchor="end"
 				>
-					{intervals[i].toFixed(2)}
+					{parseFloat(intervals[i].toFixed(2))}
 				</text>
 			</g>
 		);
