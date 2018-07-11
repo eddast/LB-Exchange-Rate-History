@@ -31,6 +31,7 @@ interface HistoricalExchangeRatesProps {}
 interface HistoricalExchangeRatesState {
   data: any;
   currencyOptions: any;
+  colors: any;
   fatalError: boolean;
   activeComparions: string[];
 }
@@ -49,7 +50,8 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       data: [],
       currencyOptions: null,
       fatalError: false,
-      activeComparions: []
+      activeComparions: [],
+      colors: this.colors
     });
     fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
@@ -66,9 +68,11 @@ export default class HistoricalExchangeRates extends React.Component <Historical
   }
 
   pushBackColor(colorIdx: number): void {
-    const color = this.colors[colorIdx];
-		this.colors.splice(colorIdx, 1);
-		this.colors.push(color);
+    const color = this.state.colors[colorIdx];
+		this.state.colors.splice(colorIdx, 1);
+    this.state.colors.push(color);
+    let newColors = this.state.colors;
+    this.setState({ colors: newColors });
 	}
 
   /**
@@ -147,12 +151,12 @@ export default class HistoricalExchangeRates extends React.Component <Historical
             />
             <LineChart
               data={this.state.data}
-              colors={this.colors}
+              colors={this.state.colors}
               deleteGraph={(graphIdx: number) => this.deleteGraph(graphIdx)}
             />
             <CurrencyTable
               data={this.state.data}
-              colors={this.colors}
+              colors={this.state.colors}
               deleteComparison={(graphIdx: number) => this.deleteGraph(graphIdx)}
             />
           </div>
