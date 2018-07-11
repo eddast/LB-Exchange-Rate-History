@@ -131,7 +131,7 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
             </div>
           }
         </div>
-        <p style={{ height: '10px', margin: '7px 0', fontSize: '10px', textAlign: 'center', color: 'red' }}>
+        <p style={{ display: this.state.errorMessage !== '' ? 'block' : 'none', height: '10px', margin: '7px 0', fontSize: '10px', textAlign: 'center', color: 'red' }}>
           {this.state.errorMessage}
         </p>
       </div>

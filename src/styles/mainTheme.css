@@ -13,8 +13,7 @@ html, body, #root {
 .graph-container{
   background-color: white;
   padding: 20px;
-  margin: 20px 0;
-  width: 75%;
+  width: 80%;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
@@ -29,9 +28,30 @@ html, body, #root {
   margin-top: 0;
   margin-left: 25px;
 }
+.add-and-chips-container {
+  display: grid;
+  width: 90%;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+}
+.add-and-chips-container > * {
+  display: grid;
+  align-items: flex-start;
+  justify-content: center;
+}
 @media screen and (max-width: 980px) {
   .graph-container {
     width: 100% !important;
+  }
+}
+@media screen and (max-width: 1100px) {
+  .add-and-chips-container {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
+    justify-content: center;
+  }
+  .graph-chips {
+    grid-template-columns: repeat(5, auto) !important;
   }
 }
 
@@ -194,7 +214,8 @@ html, body, #root {
 .graph-chips {
   margin-top: 5px;
   display: grid;
-  grid-template-columns: repeat(5, auto);
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: min-content;
 }
 .small-gray-btn {
   color: #5e5959e5;

@@ -30,7 +30,6 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
 
   componentDidUpdate(prevProps: CurrencyTableProps) {
     if (this.props !== prevProps) {
-      console.log('update');
       this.setState({ data: this.getDataValues(), toggle: !this.state.toggle }, () => {
         this.handleClick(this.state.sortedColumn)
       });
@@ -50,7 +49,7 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
       const tableEntry = {
         id: i,
         currencies: pts[0].quoteCurrency + '-' + pts[0].baseCurrency,
-        initialMid: parseFloat(pts[0].mid),
+        initialMid: parseFloat(pts[0].mid.toFixed(4)),
         endMid: parseFloat(pts[pts.length - 1].mid.toFixed(4)),
         lowestMid: parseFloat(currentLowestMid.toFixed(4)),
         highestMid: parseFloat(currentHighestMid.toFixed(4)),
@@ -79,7 +78,6 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
       const rhs = parseFloat(a[colID]), lhs = parseFloat(b[colID]);
       return rhs === lhs ? 0 : rhs < lhs ? -1 : 1;
     }
-    console.log(this.state.toggle);
     return a;
   }
 

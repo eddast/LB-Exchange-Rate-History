@@ -5,24 +5,27 @@ import CurrencyTable from '../ui/CurrencyTable';
 import GraphChip from '../ui/GraphChip';
 import { colors } from '../resources/constants';
 
-/* LOGO FUNCTION: Returns SVG Landsbankinn logo (credits to Landsbankinn) */
-const Logo = (): JSX.Element => {
+/* BANNER FUNCTION: Returns SVG Landsbankinn logo (credits to Landsbankinn) */
+const Banner = (): JSX.Element => {
   return (
-    <svg 
-      width="34" 
-      height="34" 
-      viewBox="0 0 34 34"
-      style={{display: "block", marginLeft: "auto", marginRight: "auto" }}
-    >
-      <title>Landsbankinn</title>
-      <path 
-        d="M0 33.116c1.582-.507 3.114-1.97 3.874-4.38.632-2.016 7.25-22.687 7.9-24.783.656-2.096 
-        2.402-3.88 5.077-3.926C19.53-.02 29.62.007 31.68.02c-3.03.2-4.387 1.64-5.38 4.673-.757
-        2.305-6.762 21.082-7.736 24.41-.973 3.317 3.26 4.464 4.232 1.402.612-1.907 5.462-16.516 
-        5.462-16.516s4.71 13.856 5.318 15.69c.53 1.613-.257 3.424-2.747 3.436 0 0-28.633-.048-30.83 0z" 
-        fill="#FFF"
-      />
-    </svg>
+    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+      <svg 
+        width="34" 
+        height="34" 
+        viewBox="0 0 34 34"
+        style={{ marginRight: '10%'}}
+      >
+        <title>Landsbankinn</title>
+        <path 
+          d="M0 33.116c1.582-.507 3.114-1.97 3.874-4.38.632-2.016 7.25-22.687 7.9-24.783.656-2.096 
+          2.402-3.88 5.077-3.926C19.53-.02 29.62.007 31.68.02c-3.03.2-4.387 1.64-5.38 4.673-.757
+          2.305-6.762 21.082-7.736 24.41-.973 3.317 3.26 4.464 4.232 1.402.612-1.907 5.462-16.516 
+          5.462-16.516s4.71 13.856 5.318 15.69c.53 1.613-.257 3.424-2.747 3.436 0 0-28.633-.048-30.83 0z" 
+          fill="#FFF"
+        />
+      </svg>
+      <h2>Gengisþróun</h2>
+    </span>
   );
 };
 
@@ -118,7 +121,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     if (this.state.fatalError) {
       return(
       <div className="app-container">
-        <Logo />
+        <Banner />
         <div className="graph-container" style={{ textAlign: 'center', color: '#194262'}}>
           <h3>Ekki tókst að ræsa kerfi</h3>
           <p>Athugaðu tengingu og prófaðu að endurhlaða síðunni</p>
@@ -129,19 +132,21 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     } else if (this.state.currencyOptions !== null && this.state.data.length !== 0) {
       return (
         <div className="app-container">
-          <Logo />
+          <Banner />
           <div className="graph-container">
-            <h3>Gjaldmiðlasamanburður</h3>
-            <AddCurrency
-              addComparison={(source: string, target: string, raiseError: any) => {
-                let today = new Date();
-                let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-                this.addComparison(source, target, sixMonthsBefore, today, raiseError);
-              }}
-              activeComparions={this.state.activeComparions}
-              maximumExceeded={this.state.data.length-1 >= 14}
-              currencies={this.state.currencyOptions}
-            />
+          <span className="add-and-chips-container">
+            <span className="add-chips-func">
+              <AddCurrency
+                addComparison={(source: string, target: string, raiseError: any) => {
+                  let today = new Date();
+                  let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
+                  this.addComparison(source, target, sixMonthsBefore, today, raiseError);
+                }}
+                activeComparions={this.state.activeComparions}
+                maximumExceeded={this.state.data.length-1 >= 14}
+                currencies={this.state.currencyOptions}
+              />
+            </span>
             <span className="graph-chips">
               { this.state.activeComparions.map((comparisonID: any, idx: any) =>
                 <GraphChip
@@ -152,8 +157,8 @@ export default class HistoricalExchangeRates extends React.Component <Historical
                   onDelete={() => this.deleteGraph(idx)}
                 />
               )}
+            </span>
           </span>
-            <h3>Gengisþróun samanburða</h3>
             <CurrencyTable
               data={this.state.data}
               colors={this.state.colors}
@@ -171,7 +176,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     } else {
       return (
         <div className="app-container">
-          <Logo />
+          <Banner />
           <div className="graph-container content-not-loaded" style={{ textAlign: 'center', color: '#194262'}}>
             <h2>Sæki gögn...</h2>
             <div className="loader loader-large"/>
