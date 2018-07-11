@@ -29,6 +29,48 @@ html, body, #root {
   font-size: 1.5em;
 }
 
+/** LOAD SPINNERS **/
+.loader {
+  display: inline-block;
+}
+.loader-large {
+  width: 60px;
+  height: 60px;
+}
+.loader-small {
+  width: 15px;
+  height: 15px;
+}
+.loader:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+.loader-large:after {
+  width: 46px;
+  height: 46px;
+  border: 5px solid #194262;
+  border-color: #194262 transparent #194262 transparent;
+}
+.loader-small:after {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #194262;
+  border-color: #194262 transparent #194262 transparent;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
 
 /** ADD CURRENCY SECTION **/
 .add-currency-options{

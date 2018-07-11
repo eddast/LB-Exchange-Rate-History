@@ -40,7 +40,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
    */
   componentWillMount(): void {
     this.setState({
-      data: [],//[[97,92,89,30,72],[43,62,84,98,3],[23,88,52,14,4],[76,9,1,67,84],[56,89,13,7,24]],//,[61,56,7,87,13],[36,89,15,19,24],[5,9,28,17,4],[45,29,8,7,4],[52,94,81,72,42],[18,4,31,22,22],[2,9,1,2,2],[52,44,58,46,42],[33,64,22,12,2],[82,104,64,98,80]],
+      data: [],
       currencyOptions: null
     });
     fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
@@ -58,7 +58,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
   /**
    * Adds a new graph to line chart for souce and target currency for a given peroid range (from-to)
    */
-  addGraph(sourceCurrencyID: string, destCurrencyID: string, dateFrom: Date, dateTo: Date, raiseError: any){
+  addGraph(sourceCurrencyID: string, destCurrencyID: string, dateFrom: Date, dateTo: Date, cb: any){
     fetch(
       'https://api.landsbankinn.is/Securities/Currencies/v2/'
       + 'Currencies/' + sourceCurrencyID
@@ -67,8 +67,8 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       + '&to=' + this.toDateStr(dateTo),
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
     ).then(results => {
+      cb(results.ok, results.status);
       if(!results.ok){
-        raiseError(results.status);
         return null;
       }
       return results.json();

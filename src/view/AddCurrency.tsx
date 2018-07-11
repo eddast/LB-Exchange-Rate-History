@@ -9,6 +9,7 @@ interface AddCurrencyState {
   sourceCurrency: any;
   destCurrency: any;
   errorMessage: any;
+  isAdding: boolean;
 }
 
 export default class AddCurrency extends React.Component <AddCurrencyProps, AddCurrencyState> {
@@ -25,26 +26,32 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
     this.setState({
       sourceCurrency: sourceCurrency,
       destCurrency: '',
-      errorMessage: ''
+      errorMessage: '',
+      isAdding: false
     });
   }
   addCurrency(): void {
     const { sourceCurrency, destCurrency } = this.state;
     const { maximumExceeded } = this.props;
     if (sourceCurrency === destCurrency ) {
-      this.setState({ errorMessage: 'Vinsamlegast veldu mismunandi myntir í báða reiti'});
+      this.setState({ errorMessage: 'Vinsamlegast veldu mismunandi gjaldmiðla í báða reiti'});
     } else if (destCurrency === '') {
-      this.setState({ errorMessage: 'Vinsamlegast veldu mynt í báða reiti'});
+      this.setState({ errorMessage: 'Vinsamlegast veldu gjaldmiðil í báða reiti'});
     } else if(maximumExceeded) {
-      this.setState({ errorMessage: 'Of margir gengissamanburðir virkir, vinsamlegast fjarlægðu einn eða fleiri'});
+      this.setState({ errorMessage: 'Of margir gengissamanburðir virkir, vinsamlegast fjarlægðu einn eða fleiri til að bæta við nýjum gengissamanburð'});
     }else {
-      this.setState({ errorMessage: ' '});
-      this.props.addGraph(sourceCurrency, destCurrency, ((status: any) => {
-        this.setState({
-          errorMessage: status === 404 ?
-          status + ': Samanburðargengisþróun fyrir valda gjaldmiðla finnst ekki í gagnagrunni' :
-          status + ': Eitthvað fór úrskeiðis við að sækja gögn úr gagnagrunni, vinsamlegast athugaðu tengingu'
-        });
+      this.setState({ errorMessage: ' ', isAdding: true});
+      this.props.addGraph(sourceCurrency, destCurrency, ((success: boolean, status: number) => {
+        if(!success) {
+          this.setState({
+            errorMessage: status === 404 ?
+            status + ': Samanburðargengisþróun fyrir valda gjaldmiðla finnst ekki í gagnagrunni' :
+            status + ': Eitthvað fór úrskeiðis við að sækja gögn úr gagnagrunni, vinsamlegast athugaðu tengingu',
+            isAdding: false
+          });
+        } else {
+          this.setState({ isAdding: false });
+        }
       }));
     }
   }
@@ -75,10 +82,10 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
             <option key={i} value={currency.id}>{currency.id}: {currency.name}</option>
 					)} 
         </select>
-        <div className="small-gray-btn" onClick={() => this.addCurrency()}>+</div>
+        {this.state.isAdding ? <div className="loader loader-small"></div> : <div className="small-gray-btn" onClick={() => this.addCurrency()}>+</div>}
       </div>
       <p style={{ height: '10px', fontSize: '12px', textAlign: 'center', color: 'red' }}>{this.state.errorMessage}</p>
       </div>
-    )
+    );
   }
 }
