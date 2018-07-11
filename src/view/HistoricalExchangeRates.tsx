@@ -126,7 +126,6 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       return(
       <div className="app-container">
         <Logo />
-        <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
         <div className="graph-container" style={{ textAlign: 'center', color: '#194262'}}>
           <h3>Ekki tókst að ræsa kerfi</h3>
           <p>Athugaðu tengingu og prófaðu að endurhlaða síðunni</p>
@@ -137,8 +136,8 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       return (
         <div className="app-container">
           <Logo />
-          <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
           <div className="graph-container">
+            <h3>Gjaldmiðlasamanburðir</h3>
             <AddCurrency
               addGraph={(source: string, target: string, raiseError: any) => {
                 let today = new Date();
@@ -149,6 +148,9 @@ export default class HistoricalExchangeRates extends React.Component <Historical
               maximumExceeded={this.state.data.length-1 >= 14}
               currencies={this.state.currencyOptions}
             />
+            <p style={{ color: 'black' }}>//TODO setja chips hér</p>
+            <p style={{ color: 'black' }}>//TODO velja tímabil</p>
+            <h3>Gengisþróun samanburða</h3>
             <LineChart
               data={this.state.data}
               colors={this.state.colors}
@@ -166,9 +168,8 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       return (
         <div className="app-container">
           <Logo />
-          <h1 className="main-heading">Gengisþróun gjaldmiðla</h1>
-          <div className="graph-container" style={{ textAlign: 'center', color: '#194262'}}>
-            <h3>Sæki gögn...</h3>
+          <div className="graph-container content-not-loaded" style={{ textAlign: 'center', color: '#194262'}}>
+            <h2>Sæki gögn...</h2>
             <div className="loader loader-large"/>
           </div>
         </div>
