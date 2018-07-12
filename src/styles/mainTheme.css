@@ -148,7 +148,6 @@ html, body, #root {
   background-color: #fff;
   border: 1px solid #d0d0d0;
   border-radius: 2px;
-  font-family: Sans-serif;
   font-size: 10px;
   pointer-events: none;
   transform: translate(-50%, -100%);

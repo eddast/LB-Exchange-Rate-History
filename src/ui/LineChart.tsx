@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { months, monthID } from '../resources/constants';
 import { ExchangeRateComparisonData } from '../resources/interfaces';
+import calculateChangePercentage from '../services/CalculateChangePercentage';
 
 /**
  * LINECHART COMPONENT
@@ -14,6 +15,7 @@ interface LineChartProps {
 interface LineChartState {
   tooltip: boolean;				            /* True if tooltip is to be displayed for point */
   tooltipPoint: any;			            /* The point values to show tooltip for */
+  tooltipPointInitial: any;			      /* The initial point of dataset for point to show tooltip for */
   updating: boolean;			            /* True if chart is updating */
 }
 export default class LineChart extends React.Component<LineChartProps, LineChartState> {
@@ -24,6 +26,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
     this.setState({
       tooltip: false,
       tooltipPoint: tooltipValues,
+      tooltipPointInitial: tooltipValues,
       updating: false,
     });
   }
@@ -35,11 +38,12 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
   }
 
   /* Show tooltip for point */
-  showTooltip = (point: any): void => {
+  showTooltip = (point: any, initialPoint: any): void => {
     this.setState({
       updating: false,
       tooltip: true,
       tooltipPoint: point,
+      tooltipPointInitial: initialPoint,
     });
   }
 
@@ -62,6 +66,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
 
     /* Configure chart appearance */
     const { data } = this.props;
+    const singleGraph = data.length <= 1;
     const width = 650;
     const height = width * .4;
     // const size = data.length === 0 ? 1 : data[0].length - 1;
@@ -69,18 +74,19 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
 
     /* Calculate highest point to set proper height and width ratio */
     const firstDataset = data[0];
-    let dataSet: any = [], minValue = firstDataset[0].mid, maxValue = firstDataset[0].mid, heightRatio = 1;
+    let dataSet: any = [], minValue = singleGraph ? firstDataset[0].mid : 0, maxValue = 0, heightRatio = 1;
     let minDate = new Date(firstDataset[0].date), maxDate = new Date(firstDataset[0].date);
     dataSet = data.forEach((pts: any, i: number) => {
       pts.map((p: any) => {
         // Extract values for all datasets to construct graphs
-        p.mid > maxValue ? maxValue = p.mid : null;
-        p.mid < minValue ? minValue = p.mid : null;
+        const pointVal = singleGraph ? p.mid : calculateChangePercentage(p.mid, pts[0].mid, 3);
+        pointVal > maxValue ? maxValue = pointVal : null;
+        pointVal < minValue ? minValue = pointVal : null;
         const currDate = new Date(p.date);
         currDate.getTime() > maxDate.getTime() ? maxDate = currDate : null;
         currDate.getTime() < minDate.getTime() ? minDate = currDate : null;
       });
-    }); heightRatio = maxValue === firstDataset[0].mid ? 1 : height / (maxValue - minValue);
+    }); heightRatio = maxValue === 0 ? 1 : height / (maxValue - minValue);
 
     /* Setup data, calculate x and y coordinates and set color */
     dataSet = data.map((pts: any, datasetIndex: any) => {
@@ -91,13 +97,16 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
         if (this.longerThanDay(this.getDateDifference(pt.date, prevDate))) {
           x = ~~(prevX + (xInterval * 3)) + .5;
         } prevX = x; prevDate = pt.date;
+        const pointVal = singleGraph ? pt.mid : calculateChangePercentage(pt.mid, pts[0].mid, 3);
         return ({
           /* x coordinate of point in graph */
           x,
           /* y coordinate of point in graph */
-          y: ~~((heightRatio) * (maxValue - pt.mid) + padding) + .5,
+          y: ~~((heightRatio) * (maxValue - pointVal) + padding) + .5,
           /* value point holds */
           value: pt,
+          /* initial point in graph */
+          initialValue: pts[0],
           /* color assigned to point (and dataset) */
           color: this.props.colors[datasetIndex % this.props.colors.length]
         })
@@ -152,6 +161,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
           this.state.tooltip ?
             <Tooltip
               point={this.state.tooltipPoint}
+              pointInitial={this.state.tooltipPointInitial}
             />
             : null
         }
@@ -163,11 +173,13 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
 
 /* TOOLTIP FUNCTION: Displays a tooltip at a set coordinate */
 interface TooltipProps {
-  point: any;				/* point tooltip displays */
+  point: any;				  /* point tooltip displays */
+  pointInitial: any;	/* initial point of dataset containing point tooltip displays */
 }
-const Tooltip = ({ point }: TooltipProps) => {
+const Tooltip = ({ point, pointInitial }: TooltipProps) => {
   const { value } = point;
-  const date = new Date(value.date)
+  const date = new Date(value.date);
+  const changeValuePercentage = calculateChangePercentage(value.mid, pointInitial.value.mid, 3);
   return (
     <span
       className="rate-history-chart--tooltip"
@@ -176,6 +188,13 @@ const Tooltip = ({ point }: TooltipProps) => {
       <p><strong>{value.quoteCurrency}-{value.baseCurrency}</strong></p>
       <p>{date.getDate()}. {months[date.getMonth()]} {date.getFullYear()}</p>
       <p>Miðgengi: <strong>{value.mid}</strong></p>
+      <p>Heildarbreyting: 
+        <strong
+          style={{ color: changeValuePercentage >= 0 ? 'green' : 'red' }}
+        >
+           {changeValuePercentage}%
+        </strong>
+      </p>
     </span>
   );
 };
@@ -295,6 +314,7 @@ const Points = ({ points, dataSetIndex, showTooltip, hideTooltip }: PointsProps)
         <Point
           key={ptindex}
           point={point}
+          initialPoint={points[0]}
           showTooltip={showTooltip}
           hideTooltip={hideTooltip}
         />)}
@@ -336,6 +356,7 @@ const Lines = ({ points, dataSetIndex, width, height, padding, color, updating }
  */
 interface PointProps {
   point: any;						/* coordinates, value and color of point */
+  initialPoint: any;		/* coordinates, value and color of initial point in set */
   showTooltip: any;			/* function, shows tooltip for point */
   hideTooltip: any;			/* function, hides tooltip for point */
 }
@@ -352,7 +373,7 @@ class Point extends React.Component<PointProps, PointState> {
   /* Shows point and tooltip when point is hovered*/
   showInfo(): void {
     this.setState({ show: true });
-    this.props.showTooltip(this.props.point);
+    this.props.showTooltip(this.props.point, this.props.initialPoint);
   }
 
   /* Hides point and tooltip when point is hovered*/
