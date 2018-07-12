@@ -191,14 +191,14 @@ const Tooltip = ({ point, pointInitial }: TooltipProps) => {
       style={{ textAlign: 'center', color: point.color, left: ~~point.x, top: ~~point.y - 10 }}
     >
       <p><strong>{value.quoteCurrency} - {value.baseCurrency}</strong></p>
-      <div className="seperator-line" style={{ backgroundColor: point.color }}/>
+      <div className="seperator-line" style={{ backgroundColor: point.color }} />
       <p>{date.getDate()}. {MONTHS[date.getMonth()]} {date.getFullYear()}</p>
       <p>Miðgengi: <strong>{value.mid}</strong></p>
       <p>Breyting: &nbsp;
         <strong
           style={{ color: changeValuePercentage >= 0 ? 'green' : 'red' }}
         >
-           {changeValuePercentage}%
+          {changeValuePercentage}%
         </strong>
       </p>
     </span>
@@ -227,7 +227,7 @@ const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProp
     intervals.push(currVal);
   } intervals.push(minValue);
   axis.push(
-    <g key={numAxis+1}>
+    <g key={numAxis + 1}>
       <line
         x1={padding}
         y1={firstY}
@@ -239,12 +239,14 @@ const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProp
       />
     </g>
   );
-  axis.push (
-    <g key={numAxis+2}>
+  const x = ((width / 2) + padding) + .5;
+  const y = ~~(height + (padding * 2.2)) + .5;
+  axis.push(
+    <g key={numAxis + 2}>
       <text
-        className="rate-history-chart--axis rate-history-chart--label"
-        x={padding+padding}
-        y={((height / 2) + padding) + .5}
+        className="rate-history-chart--axis"
+        x={x}
+        y={y}
       >
         Label
       </text>
@@ -287,7 +289,7 @@ interface XAxisProps {
   width: number;								/* linechart width data px */
 }
 const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
-  let yaxis = [];
+  let axis = [];
   const numAxis = 8;						/* number of axis */
   height = height + padding;		/* height for chart */
 
@@ -302,10 +304,23 @@ const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
   }
   intervals.push(maxDate);
 
+  const x = -((height / 2) + padding) + .5;
+  const y = 0;
+  axis.push(
+    <g key={numAxis + 2}>
+      <text
+        className="rate-history-chart--axis rate-history-chart--label"
+        x={x}
+        y={y}
+      >
+        Label
+      </text>
+    </g>
+  );
   /* set up all axis */
   for (let i = 0; i < numAxis; i++) {
     let x = ~~(i * (width / (numAxis - 1)) + padding) + .5
-    yaxis.push(
+    axis.push(
       <g key={i}>
         <text
           className="rate-history-chart--axis"
@@ -327,7 +342,7 @@ const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
       </g>
     );
   }
-  return <g>{yaxis}</g>
+  return <g>{axis}</g>
 };
 
 
