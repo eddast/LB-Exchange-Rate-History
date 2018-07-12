@@ -190,6 +190,9 @@ html, body, #root {
   opacity: .8;
 }	
 .rate-history-chart--label {
+  transform: rotate(-90deg);
+}	
+.rate-history-chart--label {
   font-family: Sans-serif;
   font-size: 10px;
 }
@@ -299,4 +302,7 @@ html, body, #root {
 .currency-table tr:hover .indicate-sort {
   opacity: .4;
   transition: all .2s ease-in-out;
+}
+.rate-history-chart-svg {
+  overflow: visible;
 }

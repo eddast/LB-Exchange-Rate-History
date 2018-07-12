@@ -123,6 +123,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
         <svg
           width={(width + padding * 2) + 'px'}
           height={(height + 2 * padding) + 'px'}
+          className="rate-history-chart-svg"
         >
           <g>
             <XAxis
@@ -236,6 +237,17 @@ const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProp
         strokeDasharray={"10,10"}
         strokeWidth='1px'
       />
+    </g>
+  );
+  axis.push (
+    <g key={numAxis+2}>
+      <text
+        className="rate-history-chart--axis rate-history-chart--label"
+        x={padding+padding}
+        y={((height / 2) + padding) + .5}
+      >
+        Label
+      </text>
     </g>
   );
 
