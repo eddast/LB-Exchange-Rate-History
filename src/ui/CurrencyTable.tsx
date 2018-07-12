@@ -41,7 +41,7 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
     { title: 'Endir',                         dataTargetID: 'endMid',           sortable: true },
     { title: 'Lægst',                         dataTargetID: 'lowestMid',        sortable: true },
     { title: 'Hæst',                          dataTargetID: 'highestMid',       sortable: true },
-    { title: 'Heildarbreyting tímabils (%)',  dataTargetID: 'changePercentage', sortable: true },
+    { title: 'Heildarbreyting (%)',           dataTargetID: 'changePercentage', sortable: true },
     { title: '',                              dataTargetID: 'deleteAction',     sortable: false },
   ];
 

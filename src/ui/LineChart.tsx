@@ -191,16 +191,16 @@ const Tooltip = ({ point, pointInitial }: TooltipProps) => {
       className="rate-history-chart--tooltip"
       style={{ textAlign: 'center', color: point.color, left: ~~point.x, top: ~~point.y - 10 }}
     >
-      <p><strong>{value.quoteCurrency} - {value.baseCurrency}</strong></p>
+      <p><strong style={{ fontSize: '11px' }}>{value.quoteCurrency} - {value.baseCurrency}</strong></p>
       <div className="seperator-line" style={{ backgroundColor: point.color }} />
       <p>{date.getDate()}. {MONTHS[date.getMonth()]} {date.getFullYear()}</p>
-      <p>Miðgengi: <strong>{value.mid}</strong></p>
+      <p>Miðgengi: {value.mid}</p>
       <p>Breyting: &nbsp;
-        <strong
+        <span
           style={{ color: changeValuePercentage >= 0 ? 'green' : 'red' }}
         >
           {changeValuePercentage}%
-        </strong>
+        </span>
       </p>
     </span>
   );

@@ -5,6 +5,7 @@ import CurrencyTable from '../ui/CurrencyTable';
 import GraphChip from '../ui/GraphChip';
 import { COLORS, MAXCOMPARISONS } from '../resources/constants';
 import { ExchangeRateComparisonData, CurrencyOption } from '../resources/interfaces';
+import DateRange from '../ui/DateRange';
 
 /* BANNER FUNCTION: Returns SVG Landsbankinn logo (credits to Landsbankinn) */
 const Banner = (): JSX.Element => {
@@ -166,6 +167,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
               )}
             </span>
           </span>
+            <DateRange/>
             <CurrencyTable
               data={this.state.data}
               colors={this.state.colors}

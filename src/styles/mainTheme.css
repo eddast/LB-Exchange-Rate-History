@@ -229,7 +229,6 @@ html, body, #root {
   margin-top: 5px;
   display: grid;
   grid-template-columns: repeat(3, auto);
-  /* grid-template-rows: min-content; */
 }
 .small-gray-btn {
   color: #5e5959e5;
@@ -271,6 +270,57 @@ html, body, #root {
   width: 10px;
   height: 10px;
   margin: 0;
+}
+
+/** DATE RANGE INPUT **/
+.date-range-slider {
+  margin: 25px 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat( auto-fit, 14% );
+  grid-template-rows: auto max-content;
+  grid-auto-flow: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.date-range-slider > * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.date-range-label {
+  color: #c7b8b8;
+  font-size: 12px;
+  font-weight: lighter;
+  margin: 10px 0;
+}
+.date-range-label.active {
+  color: #194262;
+  font-size: 13px;
+  font-weight: normal;
+  margin: 10px 0;
+}
+.slide-indicator.active {
+  width: 18px !important;
+  height: 18px !important;
+  background-color: #194262 !important;
+}
+.slide-indicator {
+  background-color: #e2d5d5;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+}
+@media screen and (max-width: 535px) {
+  .date-range-slider > * {
+    display: none;
+  }
+}
+
+.graph-color-large{
+  width: 25px;
+  height: 25px;
 }
 
 
