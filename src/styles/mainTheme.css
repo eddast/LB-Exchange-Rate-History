@@ -324,16 +324,47 @@ html, body, #root {
   height: 10px;
   border-radius: 100%;
   cursor: pointer;
+  z-index: 10000;
 }
 .slide-bar {
   position: absolute;
-  background-color: #e2d5d5 ;
+  background-color: #e2d5d5;
   height: 1px;
-  width: 100% !important;
+  width: 100%;
 }
 .slide-bar.active {
   height: 2px !important;
   background-color: #486379 !important
+}
+.slide-bar.active-bar {
+  left: 0 !important;
+  width: 55% !important;
+  height: 2px !important;
+  background-color: #194262 !important
+}
+.slide-bar.inactive-bar {
+  left: 55% !important;
+  width: 45% !important;
+  height: 1px !important;
+  background-color: #e2d5d5 !important
+}
+.slide-bar.start.active {
+  left: 50% !important;
+  width: 50% !important;
+  height: 2px !important;
+  background-color: #194262 !important
+}
+.slide-bar.start {
+  left: 50% !important;
+  width: 50% !important;
+  height: 1px !important;
+  background-color: #e2d5d5 !important
+}
+.slide-bar.end {
+  left: 0 !important;
+  width: 50% !important;
+  height: 1px !important;
+  background-color: #e2d5d5 !important
 }
 @media screen and (max-width: 570px) {
   .date-range-slider > * {

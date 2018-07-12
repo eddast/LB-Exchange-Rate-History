@@ -37,13 +37,15 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     });
   }
 
-  renderBar(i: number, isActive: boolean) {
-    if (i < this.PredefinedRanges.length - 1) {
-
+  renderBar(i: number, isActive: boolean, lessThanActive: boolean) {
+    if (i >= this.PredefinedRanges.length - 1) {
+      return <div className={isActive ? 'slide-bar active-bar' : 'slide-bar end'}></div>
     } else if (i === 0) {
-
+      return <div className={lessThanActive ? 'slide-bar start active' : 'slide-bar start'}></div>
+    } else if (isActive) {
+      return [<div className={'slide-bar active-bar'}></div>, <div className={'slide-bar inactive-bar'}></div>]
     }
-    return <div className={isActive ? 'slide-bar active' : 'slide-bar'}></div>
+    return <div className={lessThanActive ? 'slide-bar active' : 'slide-bar'}></div>
   }
 
   render(): JSX.Element {
@@ -53,42 +55,46 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
           {this.PredefinedRanges.map((range: any, i: number) => {
             const isActive: boolean = this.state.activeRange === range;
             const lessThanActive: boolean = this.state.activeRange.from.getTime() < range.from.getTime();
-            return([
-                <span
-                  key={i}
-                  onClick={() => {
-                    this.setState({ activeRange: range });
-                    this.props.changeDateRange(range.from, new Date());
-                  }}
-                >
-                  <div
-                    className={
-                      isActive ? 'slide-indicator active' :
+            return ([
+              <span
+                key={i}
+                onClick={() => {
+                  this.setState({ activeRange: range });
+                  this.props.changeDateRange(range.from, new Date());
+                }}
+              >
+                <div
+                  className={
+                    isActive ? 'slide-indicator active' :
                       lessThanActive ? 'slide-indicator less-than-active' :
-                      'slide-indicator'
-                    }
-                  />
-                  {this.renderBar(i, isActive || lessThanActive)}
-                </span>,
-                <span
-                  key={i+this.PredefinedRanges.length}
-                  onClick={() => {
-                    this.setState({ activeRange: range });
-                    this.props.changeDateRange(range.from, new Date());
-                  }}
-                  className={isActive ? 'date-range-label active' : 'date-range-label'}
-                >
-                  {range.name}
-                </span>
+                        'slide-indicator'
+                  }
+                />
+                {this.renderBar(i, isActive, lessThanActive)}
+              </span>,
+              <span
+                key={i + this.PredefinedRanges.length}
+                onClick={() => {
+                  this.setState({ activeRange: range });
+                  this.props.changeDateRange(range.from, new Date());
+                }}
+                className={isActive ? 'date-range-label active' : 'date-range-label'}
+              >
+                {range.name}
+              </span>
             ]);
           })}
         </div>
         <div className='date-range-picker-container'>
           <p>Gengisþróun tímabilsins</p>
-          <input type="date"/>
+          <input type="date" />
           <span>–</span>
+<<<<<<< HEAD
           <input type="date"/>
           <div>uppfæra tímabil</div>
+=======
+          <input type="date" />
+>>>>>>> 4e329579a338b830864886a34b012f1b356a0464
         </div>
       </div>
     )
