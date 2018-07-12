@@ -36,13 +36,16 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     });
   }
 
-  renderBar(i: number, isActive: boolean) {
+  renderBar(i: number, isActive: boolean, lessThanActive: boolean) {
     if (i < this.PredefinedRanges.length - 1) {
 
     } else if (i === 0) {
 
+    } else if (isActive) {
+      console.log('active')
+      return [<div className={'slide-bar active-bar'}></div>, <div className={'slide-bar inactive-bar'}></div>]
     }
-    return <div className={isActive ? 'slide-bar active' : 'slide-bar'}></div>
+    return <div className={lessThanActive ? 'slide-bar active' : 'slide-bar'}></div>
   }
 
   render(): JSX.Element {
@@ -58,7 +61,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
                   lessThanActive ? 'slide-indicator less-than-active' :
                     'slide-indicator'}
               />
-              {this.renderBar(i, isActive || lessThanActive)}
+              {this.renderBar(i, isActive, lessThanActive)}
             </span>,
             <span
               onClick={() => this.setState({ activeRange: range })}

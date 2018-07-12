@@ -322,10 +322,22 @@ html, body, #root {
   position: absolute;
   background-color: #e2d5d5 ;
   height: 1px;
-  width: 100% !important;
+  width: 100%;
 }
 .slide-bar.active {
   height: 2px !important;
+  background-color: #194262 !important
+}
+.slide-bar.active-bar {
+  align-self: flex-start;
+  width: 60% !important;
+  height: 2px !important;
+  background-color: #194262 !important
+}
+.slide-bar.inactive-bar {
+  left: 60% !important;
+  width: 40% !important;
+  height: 1px !important;
   background-color: #194262 !important
 }
 @media screen and (max-width: 570px) {
