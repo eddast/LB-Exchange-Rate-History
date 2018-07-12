@@ -4,6 +4,7 @@ import AddCurrency from './AddCurrency';
 import CurrencyTable from '../ui/CurrencyTable';
 import GraphChip from '../ui/GraphChip';
 import { colors } from '../resources/constants';
+import { ExchangeRateComparisonData, CurrencyOption } from '../resources/interfaces';
 
 /* BANNER FUNCTION: Returns SVG Landsbankinn logo (credits to Landsbankinn) */
 const Banner = (): JSX.Element => {
@@ -33,11 +34,13 @@ const Banner = (): JSX.Element => {
  * HISTORICALEXCHANGERATES COMPONENT
  * Root component - plots all functionality of app
  */
-interface HistoricalExchangeRatesProps {}
+interface HistoricalExchangeRatesProps {
+  
+}
 interface HistoricalExchangeRatesState {
-  data: any;
-  currencyOptions: any;
-  colors: any;
+  data: ExchangeRateComparisonData[];
+  currencyOptions: CurrencyOption[];
+  colors: string[];
   fatalError: boolean;
   activeComparions: string[];
 }
@@ -48,7 +51,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     const initialSourceCurrency = 'ISK', initialTargetCurrency = 'EUR';
     this.setState({
       data: [],
-      currencyOptions: null,
+      currencyOptions: [],
       fatalError: false,
       activeComparions: [],
       colors: colors
@@ -129,7 +132,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       </div>
       );
     /* render data if at least one comparison has been fetched to be displayed */
-    } else if (this.state.currencyOptions !== null && this.state.data.length !== 0) {
+    } else if (this.state.currencyOptions.length !== 0 && this.state.data.length !== 0) {
       return (
         <div className="app-container">
           <Banner />

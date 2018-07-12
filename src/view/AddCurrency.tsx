@@ -1,30 +1,31 @@
 import * as React from 'react';
+import { CurrencyOption } from '../resources/interfaces';
 
 /**
  * ADDCURRENCY COMPONENT
  * Sets up options to add comparison cross
  */
 interface AddCurrencyProps {
-  maximumExceeded: boolean;   /* true if user has selected too many comparison crosses */
-  currencies: any;            /* currencies available for comparison */
-  addComparison: any;         /* adds comparison cross to data */
-  activeComparions: any;      /* all currently active comparison crosses */
+  maximumExceeded: boolean;     /* true if user has selected too many comparison crosses */
+  currencies: CurrencyOption[]; /* currencies available for comparison */
+  addComparison: any;           /* function, adds comparison cross to data */
+  activeComparions: any;        /* all currently active comparison crosses */
 }
 interface AddCurrencyState {
-  sourceCurrency: any;        /* current selected currency for source */
-  targetCurrency: any;        /* current selected currency for target */
-  errorMessage: any;          /* potential error message to guide user */
-  isAdding: boolean;          /* true if comparison is being added */
+  sourceCurrency: string;       /* current selected currency for source */
+  targetCurrency: string;       /* current selected currency for target */
+  errorMessage: string;         /* potential error message to guide user */
+  isAdding: boolean;            /* true if comparison is being added */
 }
 export default class AddCurrency extends React.Component <AddCurrencyProps, AddCurrencyState> {
 
   /* initialize state */
   componentWillMount(): void {
     const { currencies } = this.props;
-    let sourceCurrency = currencies[0];
+    let sourceCurrency = currencies[0].id;
     for(let i = 0; i < currencies.length; i++) {
       if(currencies[i].id === 'ISK') {
-        sourceCurrency = currencies[i].id
+        sourceCurrency = currencies[i].id;
         break;
       }
     }
