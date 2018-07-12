@@ -1,4 +1,5 @@
 import * as React from 'react';
+import calculateChangePercentage from '../services/CalculateChangePercentage'
 
 /**
  * CURRENCYTABLE COMPONENT
@@ -87,17 +88,12 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
         endMid: endMid,
         lowestMid: parseFloat(currentLowestMid.toFixed(4)),
         highestMid: parseFloat(currentHighestMid.toFixed(4)),
-        changePercentage: this.calculateChangePercentage(endMid, initialMid),
+        changePercentage: calculateChangePercentage(endMid, initialMid, 3),
         color: this.props.colors[i % this.props.colors.length]
       }; tableEntries.push(tableEntry);
     });
 
     return tableEntries;
-  }
-
-  /* calculates change percentage (heildarbreytingu) */
-  calculateChangePercentage(endValue: number, initialValue: number): number {
-    return parseFloat((((endValue - initialValue) / endValue) * 100).toFixed(3))
   }
 
   /* sorts data ascending or descending when table head is clicked */
