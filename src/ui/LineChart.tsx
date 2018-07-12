@@ -232,8 +232,8 @@ const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProp
         y1={firstY}
         x2={width + padding}
         y2={firstY}
-        stroke={'#dddada'}
-        strokeDasharray={"5,5"}
+        stroke={'#d3cccc'}
+        strokeDasharray={"10,10"}
         strokeWidth='1px'
       />
     </g>
@@ -249,7 +249,7 @@ const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProp
           y1={y}
           x2={width + padding}
           y2={y}
-          stroke={'#f5f4f4'}
+          stroke={'#ece8e8'}
           strokeWidth={'1px'}
         />
         <text
