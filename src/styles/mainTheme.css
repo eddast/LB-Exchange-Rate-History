@@ -288,6 +288,7 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 .date-range-label {
   color: #c7b8b8;
@@ -311,6 +312,16 @@ html, body, #root {
   width: 10px;
   height: 10px;
   border-radius: 100%;
+}
+.slide-bar {
+  position: absolute;
+  background-color: #e2d5d5 ;
+  height: 1px;
+  width: 100% !important;
+}
+.slide-bar.active {
+  height: 2px !important;
+  background-color: #194262 !important
 }
 @media screen and (max-width: 535px) {
   .date-range-slider > * {
