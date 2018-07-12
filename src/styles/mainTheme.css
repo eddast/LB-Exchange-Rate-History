@@ -31,7 +31,7 @@ html, body, #root {
 .add-and-chips-container {
   display: grid;
   width: 90%;
-  grid-template-columns: auto auto;
+  grid-template-columns: repeat( auto-fit, 50% );
   justify-content: space-between;
 }
 .add-and-chips-container > * {
@@ -105,6 +105,8 @@ html, body, #root {
 }
 .add-currency-options .small-gray-btn{
   margin-left: 20px;
+  font-size: 14px;
+  font-weight: bolder;
 }
 .currency-select{
   border: 0 !important;
@@ -215,7 +217,7 @@ html, body, #root {
   margin-top: 5px;
   display: grid;
   grid-template-columns: repeat(3, auto);
-  grid-template-rows: min-content;
+  /* grid-template-rows: min-content; */
 }
 .small-gray-btn {
   color: #5e5959e5;
@@ -231,8 +233,8 @@ html, body, #root {
   padding: 0;
   margin: 0 -4px 0 4px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 100;
+  font-size: 12px;
+  font-weight: 300;
   line-height: 20px;
 }
 .small-gray-btn:hover {
@@ -280,7 +282,7 @@ html, body, #root {
 .currency-table {
   text-align: center;
 }
-.currency-table th:hover:not(:first-child) {
+.currency-table th:hover:not(:first-child):not(:last-child) {
   background-color: #01e1ff0c;
   transition: all .2 ease-in-out;
 }
@@ -291,6 +293,6 @@ html, body, #root {
   opacity: 0;
 }
 .currency-table tr:hover .indicate-sort {
-  opacity: .3;
+  opacity: .4;
   transition: all .2s ease-in-out;
 }
