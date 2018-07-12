@@ -132,6 +132,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
               padding={padding}
               width={width}
               height={height}
+              singleGraph={singleGraph}
             />
             <YAxis
               maxValue={maxValue}
@@ -244,11 +245,11 @@ const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProp
   axis.push(
     <g key={numAxis + 2}>
       <text
-        className="rate-history-chart--axis"
+        className="rate-history-chart--label"
         x={x}
-        y={y}
+        y={y+15}
       >
-        Label
+        Dagsetning
       </text>
     </g>
   );
@@ -287,8 +288,9 @@ interface XAxisProps {
   minDate: Date;								/* min x value in for data */
   maxDate: Date;								/* max x value in array */
   width: number;								/* linechart width data px */
+  singleGraph: boolean;         /* true if only one graph is displayed */
 }
-const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
+const XAxis = ({ padding, height, minDate, maxDate, width, singleGraph }: XAxisProps) => {
   let axis = [];
   const numAxis = 8;						/* number of axis */
   height = height + padding;		/* height for chart */
@@ -309,11 +311,11 @@ const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
   axis.push(
     <g key={numAxis + 2}>
       <text
-        className="rate-history-chart--axis rate-history-chart--label"
+        className="rate-history-chart--label-transpose"
         x={x}
-        y={y}
+        y={y - 20}
       >
-        Label
+        {singleGraph ? 'Miðgengi' : 'Breyting (%)'}
       </text>
     </g>
   );

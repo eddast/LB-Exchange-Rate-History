@@ -18,6 +18,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 50px;
 }
 .graph-container h3{
   color: #194262;
@@ -184,17 +185,21 @@ html, body, #root {
   content: ': ';
 }
 .rate-history-chart--axis {
-  font-family: Sans-serif;
   font-size: 10px;
   fill: #194262;
   opacity: .8;
 }	
-.rate-history-chart--label {
+.rate-history-chart--label-transpose {
   transform: rotate(-90deg);
 }	
+.rate-history-chart--label-transpose,
 .rate-history-chart--label {
-  font-family: Sans-serif;
-  font-size: 10px;
+  font-size: 11px;
+  margin: 20px 0;
+  text-transform: uppercase;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  fill: #c9c0c0;
 }
 .rate-history-chart circle {
   transition: .3s ease-in-out;
