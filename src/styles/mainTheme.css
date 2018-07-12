@@ -295,16 +295,20 @@ html, body, #root {
   font-size: 12px;
   font-weight: lighter;
   margin: 10px 0;
+  cursor: pointer;
 }
 .date-range-label.active {
   color: #194262;
-  font-size: 13px;
-  font-weight: normal;
+  font-size: 14px;
+  font-weight: bold;
   margin: 10px 0;
 }
+.less-than-active {
+  background-color: #194262 !important;
+}
 .slide-indicator.active {
-  width: 18px !important;
-  height: 18px !important;
+  width: 16px !important;
+  height: 16px !important;
   background-color: #194262 !important;
 }
 .slide-indicator {
@@ -312,6 +316,7 @@ html, body, #root {
   width: 10px;
   height: 10px;
   border-radius: 100%;
+  cursor: pointer;
 }
 .slide-bar {
   position: absolute;
@@ -323,7 +328,7 @@ html, body, #root {
   height: 2px !important;
   background-color: #194262 !important
 }
-@media screen and (max-width: 535px) {
+@media screen and (max-width: 570px) {
   .date-range-slider > * {
     display: none;
   }
