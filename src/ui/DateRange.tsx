@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 interface DateRangeProps {
+  changeDateRange: any;
 }
 interface DateRangeState {
   activeRange: TimeRanges;
@@ -39,12 +40,14 @@ export default class DateRange extends React.Component <DateRangeProps, DateRang
     return (
       <div className='date-range-slider'>
         {this.PredefinedRanges.map((range: any, i: number) => {
-          console.log(range.name);
-          console.log(range.from);
           const isActive: boolean = this.state.activeRange === range;
           const lessThanActive: boolean = this.state.activeRange.from.getTime() < range.from.getTime();
           return([
-              <span onClick={() => this.setState({ activeRange: range })}>
+              <span onClick={() => {
+                  this.setState({ activeRange: range });
+                  this.props.changeDateRange(range.from, new Date());
+                }}
+              >
                 <div className={
                   isActive ? 'slide-indicator active' :
                   lessThanActive ? 'slide-indicator less-than-active' :
@@ -52,7 +55,10 @@ export default class DateRange extends React.Component <DateRangeProps, DateRang
                 />
               </span>,
               <span
-                onClick={() => this.setState({ activeRange: range })}
+                onClick={() => {
+                  this.setState({ activeRange: range });
+                  this.props.changeDateRange(range.from, new Date());
+                }}
                 className={isActive ? 'date-range-label active' : 'date-range-label'}
               >
                 {range.name}
