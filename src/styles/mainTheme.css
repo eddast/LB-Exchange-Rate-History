@@ -273,9 +273,16 @@ html, body, #root {
 }
 
 /** DATE RANGE INPUT **/
-.date-range-slider {
-  margin: 25px 0;
+.date-range-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
+  margin: 40px 0;
+}
+.date-range-slider {
+  width: 80%;
   display: grid;
   grid-template-columns: repeat( auto-fit, 14% );
   grid-template-rows: auto max-content;
@@ -298,18 +305,18 @@ html, body, #root {
   cursor: pointer;
 }
 .date-range-label.active {
-  color: #194262;
+  color: #486379;
   font-size: 14px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 20px 0;
 }
 .less-than-active {
-  background-color: #194262 !important;
+  background-color: #486379 !important;
 }
 .slide-indicator.active {
   width: 16px !important;
   height: 16px !important;
-  background-color: #194262 !important;
+  background-color: #486379 !important;
 }
 .slide-indicator {
   background-color: #e2d5d5;
@@ -326,14 +333,24 @@ html, body, #root {
 }
 .slide-bar.active {
   height: 2px !important;
-  background-color: #194262 !important
+  background-color: #486379 !important
 }
 @media screen and (max-width: 570px) {
   .date-range-slider > * {
     display: none;
   }
 }
-
+.date-range-picker-container {
+  margin-top: 20px;
+  text-align: center;
+}
+.date-range-picker-container > * {
+  color: #486379;
+  margin: 5px 10px;
+  font-size: 12px;
+  font-weight: lighter;
+  text-transform: uppercase;
+}
 .graph-color-large{
   width: 25px;
   height: 25px;
