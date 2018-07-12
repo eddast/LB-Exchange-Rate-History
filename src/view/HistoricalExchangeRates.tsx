@@ -43,32 +43,37 @@ interface HistoricalExchangeRatesState {
   colors: string[];
   fatalError: boolean;
   activeComparions: string[];
+  fromDate: Date;
+  toDate: Date;
 }
 export default class HistoricalExchangeRates extends React.Component <HistoricalExchangeRatesProps, HistoricalExchangeRatesState> {
 
   /* Initialize state and fetch currency options */
   componentWillMount(): void {
     const initialSourceCurrency = 'ISK', initialTargetCurrency = 'EUR';
+    let today = new Date();
+    let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
     this.setState({
       data: [],
       currencyOptions: [],
       fatalError: false,
       activeComparions: [],
-      colors: COLORS
+      colors: COLORS,
+      fromDate: sixMonthsBefore,
+      toDate: today
+    }, () => {
+      fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
+        { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
+      ).then(results => {
+        return results.json();
+      }).then(currencies => {
+        this.setState({ currencyOptions: currencies });
+      });
+      this.addComparison(initialSourceCurrency, initialTargetCurrency, ((success: boolean) => {
+        if(!success) { this.setState({ fatalError: true}); }
+      }));
     });
-    fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
-          { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
-    ).then(results => {
-      return results.json();
-    }).then(currencies => {
-      this.setState({ currencyOptions: currencies });
-    });
-    let today = new Date();
-    let sixMonthsBefore = new Date(); // sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-    sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - (12*5));
-    this.addComparison(initialSourceCurrency, initialTargetCurrency, sixMonthsBefore, today, ((success: boolean) => {
-      if(!success) { this.setState({ fatalError: true}); }
-    }));
+
   }
 
   /* resets color pallette when comparison cross is deleted */
@@ -81,13 +86,13 @@ export default class HistoricalExchangeRates extends React.Component <Historical
 	}
 
   /* adds a new comparison with specified source and target currency for a given peroid range (from-to) */
-  addComparison(sourceCurrencyID: string, targetCurrencyID: string, dateFrom: Date, dateTo: Date, cb: any){
+  addComparison(sourceCurrencyID: string, targetCurrencyID: string, cb: any){
     fetch(
       'https://api.landsbankinn.is/Securities/Currencies/v2/'
       + 'Currencies/' + sourceCurrencyID
       + '/Rates/' + targetCurrencyID + '/History?'
-      + 'source=general&from=' + this.toDateStr(dateFrom)
-      + '&to=' + this.toDateStr(dateTo),
+      + 'source=general&from=' + this.toDateStr(this.state.fromDate)
+      + '&to=' + this.toDateStr(this.state.toDate),
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
     ).then(results => {
       cb(results.ok, results.status);
@@ -142,9 +147,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
             <span className="add-chips-func">
               <AddCurrency
                 addComparison={(source: string, target: string, raiseError: any) => {
-                  let today = new Date();
-                  let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
-                  this.addComparison(source, target, sixMonthsBefore, today, raiseError);
+                  this.addComparison(source, target, raiseError);
                 }}
                 activeComparions={this.state.activeComparions}
                 maximumExceeded={this.state.data.length >= MAXCOMPARISONS}
