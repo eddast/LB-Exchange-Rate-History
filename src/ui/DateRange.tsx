@@ -10,15 +10,15 @@ interface TimeRanges {
   name: string;
   from: Date;
 }
-export default class DateRange extends React.Component <DateRangeProps, DateRangeState> {
+export default class DateRange extends React.Component<DateRangeProps, DateRangeState> {
   private PredefinedRanges: TimeRanges[] = [
-    {   name: 'vika',         from: this.getDateWeeksBefore(1)      },
-    {   name: 'tvær vikur',   from: this.getDateWeeksBefore(2)      },
-    {   name: 'mánuður',      from: this.getDateMonthsBefore(1)     },
-    {   name: 'sex mánuðir',  from: this.getDateMonthsBefore(6)     },
-    {   name: 'ár',           from: this.getDateMonthsBefore(12)    },
-    {   name: 'tvö ár',       from: this.getDateMonthsBefore(2*12)  },
-    {   name: 'fimm ár',      from: this.getDateMonthsBefore(5*12)  },
+    { name: 'vika', from: this.getDateWeeksBefore(1) },
+    { name: 'tvær vikur', from: this.getDateWeeksBefore(2) },
+    { name: 'mánuður', from: this.getDateMonthsBefore(1) },
+    { name: 'sex mánuðir', from: this.getDateMonthsBefore(6) },
+    { name: 'ár', from: this.getDateMonthsBefore(12) },
+    { name: 'tvö ár', from: this.getDateMonthsBefore(2 * 12) },
+    { name: 'fimm ár', from: this.getDateMonthsBefore(5 * 12) },
   ]
   getToday(): Date { return new Date() }
   getDateMonthsBefore(months: number): Date {
@@ -28,7 +28,7 @@ export default class DateRange extends React.Component <DateRangeProps, DateRang
   }
   getDateWeeksBefore(week: number): Date {
     let date = new Date();
-    date.setDate(date.getDate() - 7*week);
+    date.setDate(date.getDate() - 7 * week);
     return date;
   }
   componentWillMount(): void {
@@ -36,6 +36,16 @@ export default class DateRange extends React.Component <DateRangeProps, DateRang
       activeRange: this.PredefinedRanges[3]
     });
   }
+
+  renderBar(i: number, isActive: boolean) {
+    if (i < this.PredefinedRanges.length - 1) {
+
+    } else if (i === 0) {
+
+    }
+    return <div className={isActive ? 'slide-bar active' : 'slide-bar'}></div>
+  }
+
   render(): JSX.Element {
     return (
       <div className='date-range-slider'>
@@ -43,18 +53,24 @@ export default class DateRange extends React.Component <DateRangeProps, DateRang
           const isActive: boolean = this.state.activeRange === range;
           const lessThanActive: boolean = this.state.activeRange.from.getTime() < range.from.getTime();
           return([
-              <span onClick={() => {
+              <span
+                key={i}
+                onClick={() => {
                   this.setState({ activeRange: range });
                   this.props.changeDateRange(range.from, new Date());
                 }}
               >
-                <div className={
-                  isActive ? 'slide-indicator active' :
-                  lessThanActive ? 'slide-indicator less-than-active' :
-                  'slide-indicator'}
+                <div
+                  className={
+                    isActive ? 'slide-indicator active' :
+                    lessThanActive ? 'slide-indicator less-than-active' :
+                    'slide-indicator'
+                  }
                 />
+                {this.renderBar(i, isActive || lessThanActive)}
               </span>,
               <span
+                key={i+this.PredefinedRanges.length}
                 onClick={() => {
                   this.setState({ activeRange: range });
                   this.props.changeDateRange(range.from, new Date());
