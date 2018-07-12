@@ -68,8 +68,9 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
     const padding = 50;
 
     /* Calculate highest point to set proper height and width ratio */
-    let dataSet: any = [], minValue = Number.MAX_VALUE, maxValue = 0, heightRatio = 1;
-    let firstDataset = data[0], minDate = new Date(firstDataset[0].date), maxDate = new Date(firstDataset[0].date);
+    const firstDataset = data[0];
+    let dataSet: any = [], minValue = firstDataset[0].mid, maxValue = firstDataset[0].mid, heightRatio = 1;
+    let minDate = new Date(firstDataset[0].date), maxDate = new Date(firstDataset[0].date);
     dataSet = data.forEach((pts: any, i: number) => {
       pts.map((p: any) => {
         // Extract values for all datasets to construct graphs
@@ -79,7 +80,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
         currDate.getTime() > maxDate.getTime() ? maxDate = currDate : null;
         currDate.getTime() < minDate.getTime() ? minDate = currDate : null;
       });
-    }); heightRatio = maxValue === 0 ? 1 : height / (maxValue - minValue);
+    }); heightRatio = maxValue === firstDataset[0].mid ? 1 : height / (maxValue - minValue);
 
     /* Setup data, calculate x and y coordinates and set color */
     dataSet = data.map((pts: any, datasetIndex: any) => {
@@ -91,10 +92,14 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
           x = ~~(prevX + (xInterval * 3)) + .5;
         } prevX = x; prevDate = pt.date;
         return ({
-					/* x coordinate of point in graph */ x,
-					/* y coordinate of point in graph */ y: ~~((heightRatio) * (maxValue - pt.mid) + padding) + .5,
-					/* value point holds */ value: pt,
-					/* color assigned to point (and dataset) */ color: this.props.colors[datasetIndex % this.props.colors.length]
+          /* x coordinate of point in graph */
+          x,
+          /* y coordinate of point in graph */
+          y: ~~((heightRatio) * (maxValue - pt.mid) + padding) + .5,
+          /* value point holds */
+          value: pt,
+          /* color assigned to point (and dataset) */
+          color: this.props.colors[datasetIndex % this.props.colors.length]
         })
       }
       )
