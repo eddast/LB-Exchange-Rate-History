@@ -394,7 +394,7 @@ class Point extends React.Component<PointProps, PointState> {
         cy={point.y}
         fill={this.state.show ? point.color : 'none'}
         stroke={'#FFFFFF00'}
-        strokeWidth={"40px"}
+        strokeWidth={"25px"}
         onMouseEnter={() => this.showInfo()}
         onMouseLeave={() => this.hideInfo()}
       />
