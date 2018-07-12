@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { months, monthID } from '../resources/constants';
+import { MONTHS, MONTHIDS } from '../resources/constants';
 import { ExchangeRateComparisonData } from '../resources/interfaces';
 import calculateChangePercentage from '../services/CalculateChangePercentage';
 
@@ -192,7 +192,7 @@ const Tooltip = ({ point, pointInitial }: TooltipProps) => {
     >
       <p><strong>{value.quoteCurrency} - {value.baseCurrency}</strong></p>
       <div className="seperator-line" style={{ backgroundColor: point.color }}/>
-      <p>{date.getDate()}. {months[date.getMonth()]} {date.getFullYear()}</p>
+      <p>{date.getDate()}. {MONTHS[date.getMonth()]} {date.getFullYear()}</p>
       <p>Miðgengi: <strong>{value.mid}</strong></p>
       <p>Breyting: &nbsp;
         <strong
@@ -313,7 +313,7 @@ const XAxis = ({ padding, height, minDate, maxDate, width }: XAxisProps) => {
           y={height + 25}
           textAnchor="middle"
         >
-          {intervals[i].getDate() + '. ' + monthID[intervals[i].getMonth()]}
+          {intervals[i].getDate() + '. ' + MONTHIDS[intervals[i].getMonth()]}
         </text>
         <text
           className="rate-history-chart--axis"

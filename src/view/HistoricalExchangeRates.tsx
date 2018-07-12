@@ -3,7 +3,7 @@ import LineChart from '../ui/LineChart';
 import AddCurrency from './AddCurrency';
 import CurrencyTable from '../ui/CurrencyTable';
 import GraphChip from '../ui/GraphChip';
-import { colors } from '../resources/constants';
+import { COLORS, MAXCOMPARISONS } from '../resources/constants';
 import { ExchangeRateComparisonData, CurrencyOption } from '../resources/interfaces';
 
 /* BANNER FUNCTION: Returns SVG Landsbankinn logo (credits to Landsbankinn) */
@@ -54,7 +54,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       currencyOptions: [],
       fatalError: false,
       activeComparions: [],
-      colors: colors
+      colors: COLORS
     });
     fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
@@ -147,7 +147,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
                   this.addComparison(source, target, sixMonthsBefore, today, raiseError);
                 }}
                 activeComparions={this.state.activeComparions}
-                maximumExceeded={this.state.data.length-1 >= 14}
+                maximumExceeded={this.state.data.length >= MAXCOMPARISONS}
                 currencies={this.state.currencyOptions}
               />
             </span>

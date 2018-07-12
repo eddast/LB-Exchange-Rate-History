@@ -42,7 +42,7 @@ html, body, #root {
 @media screen and (max-width: 980px) {
   .graph-container {
     width: 100% !important;
-  }
+  } 
 }
 @media screen and (max-width: 1100px) {
   .add-and-chips-container {
@@ -51,7 +51,7 @@ html, body, #root {
     justify-content: center;
   }
   .graph-chips {
-    grid-template-columns: repeat(5, auto) !important;
+    grid-template-columns: repeat(6, auto) !important;
   }
 }
 
