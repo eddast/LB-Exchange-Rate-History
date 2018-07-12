@@ -129,12 +129,13 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
               const isActiveColumn: boolean = this.state.sortedColumn === column.dataTargetID;
               /* return column header without sorting options */
               if(!column.sortable) {
-                return <th>{column.title}</th>
+                return <th key={i}>{column.title}</th>
 
               /* otherwise return with sorting function and sort indicator on hover (small arrow) */
               } else {
                 return (
                   <th
+                    key={i}
                     onClick={() => this.handleClick(column.dataTargetID)}
                   >
                     {column.title}
@@ -160,17 +161,17 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
 
                   /* color column returns color indicator */
                   if(isColor) {
-                    return <td><div className="graph-color graph-color-small" style={{ backgroundColor: entry.color }} /></td>;
+                    return <td key={j}><div className="graph-color graph-color-small" style={{ backgroundColor: entry.color }} /></td>;
 
                   /* change value has a color indicating if it's positive */
                   } else if(isChangeValue) {
-                    return <td style={{ color: entry[column.dataTargetID] < 0 ? 'red' : 'green' }}>{entry[column.dataTargetID]}</td>;
+                    return <td key={j} style={{ color: entry[column.dataTargetID] < 0 ? 'red' : 'green' }}>{entry[column.dataTargetID]}</td>;
 
                   /* delete column displays delete action if table has more than one value */
                   } else if (isDeleteAction) {
                     if(this.state.data.length > 1) {
                       return (
-                      <td>
+                      <td key={j}>
                         <div
                           className="small-gray-btn"
                           onClick={() => { this.props.deleteComparison(entry.index) }}
@@ -180,12 +181,12 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
                       </td>
                       );
                     } else {
-                      return <td/>
+                      return <td key={j}/>
                     }
 
                   /* otherwise return data column*/
                   } else {
-                    return <td>{entry[column.dataTargetID]}</td>
+                    return <td key={j}>{entry[column.dataTargetID]}</td>
                   }
                 })}
               </tr>

@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { months, monthID } from '../resources/constants';
+import { ExchangeRateComparisonData } from '../resources/interfaces';
 
 /**
  * LINECHART COMPONENT
  * Plots a SVG line chart from exchange rate data provided as props
  */
 interface LineChartProps {
-  data: any;							/* Data to plot in chart */
-  deleteGraph: any;				/* function; executed when user deletes sub graph from chart */
-  colors: any;						/* the color pallette which chips and graph use to identify graph*/
+  data: ExchangeRateComparisonData[]; /* Data to plot in chart */
+  deleteGraph: any;				            /* function; executed when user deletes sub graph from chart */
+  colors: string[];                   /* the color pallette which chips and graph use to identify graph*/
 }
 interface LineChartState {
-  tooltip: boolean;				/* True if tooltip is to be displayed for point */
-  tooltipPoint: any;			/* The point values to show tooltip for */
-  updating: boolean;			/* True if chart is updating */
+  tooltip: boolean;				            /* True if tooltip is to be displayed for point */
+  tooltipPoint: any;			            /* The point values to show tooltip for */
+  updating: boolean;			            /* True if chart is updating */
 }
 export default class LineChart extends React.Component<LineChartProps, LineChartState> {
 
