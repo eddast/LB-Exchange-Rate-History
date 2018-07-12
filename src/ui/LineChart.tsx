@@ -114,6 +114,9 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
       )
     });
 
+    /* find first Y to plot Y comparison line */
+    let firstY = dataSet[0]; firstY = firstY[0].y;
+
     /* Plot linechart */
     return (
       <span className="rate-history-chart" style={{ width: width + 2 * padding }}>
@@ -135,6 +138,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
               padding={padding}
               width={width}
               height={height}
+              firstY={firstY}
             />
           </g>
           {dataSet.map((comparisonGraph: any, graphIdx: any) =>
@@ -207,8 +211,9 @@ interface YAxisProps {
   maxValue: number;							/* highest y value of linechart */
   minValue: number;							/* lowest y value of linechart */
   width: number;								/* linechart width in px */
+  firstY: number;								/* y coordinate of first point */
 }
-const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
+const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProps) => {
   const numAxis = 6;											/* number of axis */
   let axis = [];
 
@@ -220,6 +225,19 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
     currVal -= intervalStep;
     intervals.push(currVal);
   } intervals.push(minValue);
+  axis.push(
+    <g key={numAxis+1}>
+      <line
+        x1={padding}
+        y1={firstY}
+        x2={width + padding}
+        y2={firstY}
+        stroke={'#dddada'}
+        strokeDasharray={"5,5"}
+        strokeWidth='1px'
+      />
+    </g>
+  );
 
   /* set up all axis */
   for (let i = 0; i < numAxis; i++) {
@@ -231,8 +249,8 @@ const YAxis = ({ padding, height, maxValue, minValue, width }: YAxisProps) => {
           y1={y}
           x2={width + padding}
           y2={y}
-          stroke={'#EAEAEA'}
-          strokeWidth='1px'
+          stroke={'#f5f4f4'}
+          strokeWidth={'1px'}
         />
         <text
           className="rate-history-chart--axis"
