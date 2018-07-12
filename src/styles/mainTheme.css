@@ -267,7 +267,7 @@ html, body, #root {
   padding: 0;
   background-color: white;
   color: black;
-  font-weight: lighter;
+  font-weight: 400;
   font-size: 12px;
   margin: 30px 0;
   width: 100%;
