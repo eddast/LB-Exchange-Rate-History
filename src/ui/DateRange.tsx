@@ -51,6 +51,13 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
   render(): JSX.Element {
     return (
       <div className='date-range-container'>
+        <div className='date-range-picker-container'>
+          <span>Gengisþróun</span>
+          <input type="date" />
+          <span> til </span>
+          <input type="date"/>
+          <span>uppfæra tímabil</span>
+        </div>
         <div className='date-range-slider'>
           {this.PredefinedRanges.map((range: any, i: number) => {
             const isActive: boolean = this.state.activeRange === range;
@@ -84,17 +91,6 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
               </span>
             ]);
           })}
-        </div>
-        <div className='date-range-picker-container'>
-          <p>Gengisþróun tímabilsins</p>
-          <input type="date" />
-          <span>–</span>
-<<<<<<< HEAD
-          <input type="date"/>
-          <div>uppfæra tímabil</div>
-=======
-          <input type="date" />
->>>>>>> 4e329579a338b830864886a34b012f1b356a0464
         </div>
       </div>
     )

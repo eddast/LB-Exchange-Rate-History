@@ -174,15 +174,15 @@ export default class HistoricalExchangeRates extends React.Component <Historical
             <DateRange
               changeDateRange={(to: Date, from: Date) => this.changeDateRange(to,from)}
             />
-            <CurrencyTable
-              data={this.state.data}
-              colors={this.state.colors}
-              deleteComparison={(graphIdx: number) => this.deleteGraph(graphIdx)}
-            />
             <LineChart
               data={this.state.data}
               colors={this.state.colors}
               deleteGraph={(graphIdx: number) => this.deleteGraph(graphIdx)}
+            />
+            <CurrencyTable
+              data={this.state.data}
+              colors={this.state.colors}
+              deleteComparison={(graphIdx: number) => this.deleteGraph(graphIdx)}
             />
           </div>
         </div>
