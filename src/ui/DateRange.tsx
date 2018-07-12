@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 interface DateRangeProps {
+  changeDateRange: any;
 }
 interface DateRangeState {
   activeRange: TimeRanges;
@@ -37,12 +38,11 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
   }
 
   renderBar(i: number, isActive: boolean, lessThanActive: boolean) {
-    if (i < this.PredefinedRanges.length - 1) {
-
+    if (i >= this.PredefinedRanges.length - 1) {
+      return <div className={isActive ? 'slide-bar active-bar' : 'slide-bar end'}></div>
     } else if (i === 0) {
-
+      return <div className={lessThanActive ? 'slide-bar start active' : 'slide-bar start'}></div>
     } else if (isActive) {
-      console.log('active')
       return [<div className={'slide-bar active-bar'}></div>, <div className={'slide-bar inactive-bar'}></div>]
     }
     return <div className={lessThanActive ? 'slide-bar active' : 'slide-bar'}></div>
@@ -55,16 +55,28 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
           const isActive: boolean = this.state.activeRange === range;
           const lessThanActive: boolean = this.state.activeRange.from.getTime() < range.from.getTime();
           return ([
-            <span onClick={() => this.setState({ activeRange: range })}>
-              <div className={
-                isActive ? 'slide-indicator active' :
-                  lessThanActive ? 'slide-indicator less-than-active' :
-                    'slide-indicator'}
+            <span
+              key={i}
+              onClick={() => {
+                this.setState({ activeRange: range });
+                this.props.changeDateRange(range.from, new Date());
+              }}
+            >
+              <div
+                className={
+                  isActive ? 'slide-indicator active' :
+                    lessThanActive ? 'slide-indicator less-than-active' :
+                      'slide-indicator'
+                }
               />
               {this.renderBar(i, isActive, lessThanActive)}
             </span>,
             <span
-              onClick={() => this.setState({ activeRange: range })}
+              key={i + this.PredefinedRanges.length}
+              onClick={() => {
+                this.setState({ activeRange: range });
+                this.props.changeDateRange(range.from, new Date());
+              }}
               className={isActive ? 'date-range-label active' : 'date-range-label'}
             >
               {range.name}

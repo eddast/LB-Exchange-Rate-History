@@ -116,6 +116,10 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   }
 
+  changeDateRange(fromDate: any, toDate: any): any {
+    this.setState({ fromDate: fromDate, toDate: toDate}, () => console.log(this.state));
+  }
+
   /* Deletes a subgraph from the line chart */
   deleteGraph(graphIdx: number): void {
     this.state.data.splice(graphIdx, 1);
@@ -167,7 +171,9 @@ export default class HistoricalExchangeRates extends React.Component <Historical
               )}
             </span>
           </span>
-            <DateRange/>
+            <DateRange
+              changeDateRange={(to: Date, from: Date) => this.changeDateRange(to,from)}
+            />
             <CurrencyTable
               data={this.state.data}
               colors={this.state.colors}
