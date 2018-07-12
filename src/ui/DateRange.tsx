@@ -88,6 +88,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
           <input type="date"/>
           <span>–</span>
           <input type="date"/>
+          <div>uppfæra tímabil</div>
         </div>
       </div>
     )

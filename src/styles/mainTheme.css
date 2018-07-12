@@ -279,7 +279,7 @@ html, body, #root {
   align-items: center;
   flex-direction: column;
   width: 100%;
-  margin: 40px 0;
+  margin: 20px 0;
 }
 .date-range-slider {
   width: 80%;
@@ -346,7 +346,7 @@ html, body, #root {
 }
 .date-range-picker-container > * {
   color: #486379;
-  margin: 5px 10px;
+  margin: 15px;
   font-size: 12px;
   font-weight: lighter;
   text-transform: uppercase;
