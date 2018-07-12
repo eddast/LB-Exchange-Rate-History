@@ -35,14 +35,14 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
 
   /* table columns table displays and the data entry object's property name they display */
   private tableColumns: TableColumnValues[] = [
-    { title: '',                    dataTargetID: 'color',            sortable: false },
-    { title: 'Gjaldmiðlar',         dataTargetID: 'currencies',       sortable: false },
-    { title: 'Upphaf',              dataTargetID: 'initialMid',       sortable: true },
-    { title: 'Endir',               dataTargetID: 'endMid',           sortable: true },
-    { title: 'Lægst',               dataTargetID: 'lowestMid',        sortable: true },
-    { title: 'Hæst',                dataTargetID: 'highestMid',       sortable: true },
-    { title: 'Heildarbreyting (%)', dataTargetID: 'changePercentage', sortable: true },
-    { title: '',                    dataTargetID: 'deleteAction',     sortable: false },
+    { title: '',                              dataTargetID: 'color',            sortable: false },
+    { title: 'Gjaldmiðlar',                   dataTargetID: 'currencies',       sortable: false },
+    { title: 'Upphaf',                        dataTargetID: 'initialMid',       sortable: true },
+    { title: 'Endir',                         dataTargetID: 'endMid',           sortable: true },
+    { title: 'Lægst',                         dataTargetID: 'lowestMid',        sortable: true },
+    { title: 'Hæst',                          dataTargetID: 'highestMid',       sortable: true },
+    { title: 'Heildarbreyting tímabils (%)',  dataTargetID: 'changePercentage', sortable: true },
+    { title: '',                              dataTargetID: 'deleteAction',     sortable: false },
   ];
 
   /* initialize state and data */

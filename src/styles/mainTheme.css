@@ -157,6 +157,11 @@ html, body, #root {
   padding: 2px;
   margin: 0;
 }
+.rate-history-chart--tooltip .seperator-line {
+  height: 1px;
+  margin: 2px 0;
+  opacity: .7;
+}
 .rate-history-chart--tooltip::before {
   content: '';
   position: absolute;

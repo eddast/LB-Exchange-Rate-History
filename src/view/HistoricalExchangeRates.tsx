@@ -82,17 +82,12 @@ export default class HistoricalExchangeRates extends React.Component <Historical
 
   /* adds a new comparison with specified source and target currency for a given peroid range (from-to) */
   addComparison(sourceCurrencyID: string, targetCurrencyID: string, dateFrom: Date, dateTo: Date, cb: any){
-    console.log('https://api.landsbankinn.is/Securities/Currencies/v2/'
-    + 'Currencies/' + sourceCurrencyID
-    + '/Rates/' + targetCurrencyID + '/History?'
-    + 'source=general&from=' + this.toDateStr(dateFrom)
-    + '&to=' + this.toDateStr(dateTo));
     fetch(
       'https://api.landsbankinn.is/Securities/Currencies/v2/'
       + 'Currencies/' + sourceCurrencyID
       + '/Rates/' + targetCurrencyID + '/History?'
-      + 'source=general&from=' + this.toDateStr(dateFrom),
-      // + '&to=' + this.toDateStr(dateTo),
+      + 'source=general&from=' + this.toDateStr(dateFrom)
+      + '&to=' + this.toDateStr(dateTo),
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
     ).then(results => {
       cb(results.ok, results.status);
@@ -101,7 +96,6 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       }
       return results.json();
     }).then(newGraphData => {
-      console.log(newGraphData);
       if(newGraphData !== null) {
         this.state.data.push(newGraphData);
         this.state.activeComparions.push(sourceCurrencyID+'-'+targetCurrencyID)

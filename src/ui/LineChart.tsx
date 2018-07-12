@@ -185,10 +185,11 @@ const Tooltip = ({ point, pointInitial }: TooltipProps) => {
       className="rate-history-chart--tooltip"
       style={{ textAlign: 'center', color: point.color, left: ~~point.x, top: ~~point.y - 10 }}
     >
-      <p><strong>{value.quoteCurrency}-{value.baseCurrency}</strong></p>
+      <p><strong>{value.quoteCurrency} - {value.baseCurrency}</strong></p>
+      <div className="seperator-line" style={{ backgroundColor: point.color }}/>
       <p>{date.getDate()}. {months[date.getMonth()]} {date.getFullYear()}</p>
       <p>Miðgengi: <strong>{value.mid}</strong></p>
-      <p>Heildarbreyting: 
+      <p>Breyting: &nbsp;
         <strong
           style={{ color: changeValuePercentage >= 0 ? 'green' : 'red' }}
         >
@@ -393,6 +394,7 @@ class Point extends React.Component<PointProps, PointState> {
         cy={point.y}
         fill={this.state.show ? point.color : 'none'}
         stroke={'#FFFFFF00'}
+        strokeWidth={"40px"}
         onMouseEnter={() => this.showInfo()}
         onMouseLeave={() => this.hideInfo()}
       />
