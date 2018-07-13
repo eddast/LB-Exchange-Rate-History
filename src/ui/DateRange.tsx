@@ -53,10 +53,12 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
       <div className='date-range-container'>
         <div className='date-range-picker-container'>
           <span>Gengisþróun</span>
-          <input type="date" />
-          <span> til </span>
-          <input type="date"/>
-          <span>uppfæra tímabil</span>
+          <span>
+            <input type="date" />
+            <span style={{ marginLeft: '15px', marginRight: '15px' }}> til </span>
+            <input type="date"/>
+          </span>
+          <span className="btn" ><span/></span>
         </div>
         <div className='date-range-slider'>
           {this.PredefinedRanges.map((range: any, i: number) => {
