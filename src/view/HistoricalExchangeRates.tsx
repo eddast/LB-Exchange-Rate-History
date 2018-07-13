@@ -97,7 +97,6 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       + '&to=' + this.toDateStr(this.state.toDate),
           { headers: new Headers({'apikey': 'gwY04Ac02i5Tk9Kqt6GYeHXshE2wjOB7', 'Accept-Language': 'is-IS'})}
     ).then(results => {
-      console.log(results)
       cb(results.ok, results.status);
       if(!results.ok){
         return null;
@@ -135,15 +134,12 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     const newData: ExchangeRateComparisonData[] = [];
     Promise.all(responses).then((values) => {
       for (let i = 0; i < values.length; i++) {
-        console.log(values[i])
         values[i].json().then((data) => {
-          console.log(data)
           newData.push(data);
           this.setState({data: newData, loadingData: false});
         });
       }
     });
-    console.log(newData)
   }
 
   /* Deletes a subgraph from the line chart */

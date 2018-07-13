@@ -42,7 +42,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     } else if (i === 0) {
       return <div className={lessThanActive ? 'slide-bar start active' : 'slide-bar start'}></div>
     } else if (isActive) {
-      return [<div className={'slide-bar active-bar'}></div>, <div className={'slide-bar inactive-bar'}></div>]
+      return [<div key={'active-bar-'+i} className={'slide-bar active-bar'}></div>, <div key={'inactive-bar-'+i} className={'slide-bar inactive-bar'}></div>]
     }
     return <div className={lessThanActive ? 'slide-bar active' : 'slide-bar'}></div>
   }
@@ -55,7 +55,6 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
   }
 
   render(): JSX.Element {
-    console.log(this.getInputDateStr(this.state.fromDateInput))
     return (
       <div className='date-range-container'>
         <div className='date-range-picker-container'>
@@ -81,7 +80,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
             const lessThanActive: boolean = this.state.activeRange.from.getTime() < range.from.getTime();
             return ([
               <span
-                key={i}
+                key={'slide-indicator-'+i}
                 onClick={() => {
                   this.setState({ activeRange: range });
                   this.props.changeDateRange(range.from, new Date());
@@ -97,7 +96,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
                 {this.renderBar(i, isActive, lessThanActive)}
               </span>,
               <span
-                key={i + this.PredefinedRanges.length}
+                key={'label-' + i}
                 onClick={() => {
                   this.setState({ activeRange: range });
                   this.props.changeDateRange(range.from, new Date());
