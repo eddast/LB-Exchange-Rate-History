@@ -1,5 +1,9 @@
 import * as React from 'react';
 
+/**
+ * DATERANGE COMPONENT
+ * Renders all options to manipulate period range of data and all logic
+ */
 interface DateRangeProps {
   changeDateRange: any;
   fromDate: Date;
@@ -18,6 +22,8 @@ interface TimeRanges {
   from: Date;
 }
 export default class DateRange extends React.Component<DateRangeProps, DateRangeState> {
+
+  /* predefined period shortcuts for user, displayed as slider bar */
   private PredefinedRanges: TimeRanges[] = [
     { name: 'mánuður', from: this.getDateMonthsBefore(1) },
     { name: 'hálft ár', from: this.getDateMonthsBefore(6) },
@@ -25,12 +31,17 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     { name: 'tvö ár', from: this.getDateMonthsBefore(2 * 12) },
     { name: 'fimm ár', from: this.getDateMonthsBefore(5 * 12) },
   ]
+  /* returns today's date */
   getToday(): Date { return new Date() }
+
+  /* returns date a specific number of months ago */
   getDateMonthsBefore(months: number): Date {
     let date = new Date();
     date.setMonth(date.getMonth() - months);
     return date;
   }
+
+  /* initialize state */
   componentWillMount(): void {
     this.setState({
       toDateInput: this.props.toDate,
@@ -40,6 +51,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     });
   }
 
+  /* Renders the shortcut periods slider bar as appropriate, indicating selected values */
   renderBar(i: number, isActive: boolean, lessThanActive: boolean) {
     if (i >= this.PredefinedRanges.length - 1) {
       return <div className={isActive ? 'slide-bar active-bar' : 'slide-bar end'}></div>
@@ -51,6 +63,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     return <div className={lessThanActive ? 'slide-bar active' : 'slide-bar'}></div>
   }
 
+  /* date picker sucks, so parse date to yyyy-mm-dd to use it */
   getInputDateStr(date: Date): string {
     const d = date.getDate() < 10 ? '0' + date.getDate() : date.getDate(),
           m = date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1), 
@@ -58,16 +71,33 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     return y+"-"+m+"-"+d;
   }
 
-  isValidRange(from: Date, to: Date) {
-    return from < to;
+  /* returns true if user has chosen a valid time range */
+  rangeChosen() {
+    if(this.state.fromDateInput >= this.state.toDateInput) {
+      return {
+        valid: false,
+        message: 'Upphafsdagsetning tímabils þarf að vera smærri en endadagsetning'
+      }
+    } else if (this.state.fromDateInput > new Date() || this.state.toDateInput > new Date()) {
+      return {
+        valid: false,
+        message: 'Ekki má velja ókomna dagsetningu'
+      }
+    } else {
+      return {
+        valid: true,
+        message: ''
+      }
+    }
   }
 
+  /* changes period for exchange rate data */
   changeDate(activeRange: any, from: Date, to?: Date): void {
     if(this.props.canChangeDate) {
       if(to === undefined) {
         to = new Date();
-      } else if (!this.isValidRange(from, to)){
-        this.setState({ errorMessage: 'Ógilt tímabil valið'});
+      } else if (!this.rangeChosen().valid){
+        this.setState({ errorMessage: this.rangeChosen().message });
         return;
       } 
       this.setState({ activeRange: activeRange, errorMessage: '' });
@@ -76,12 +106,14 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     }
   }
 
+  /* spins refresh button once to indicate load */
   spin(): void {
     this.setState({ spin: true}, () =>
       setTimeout(() => { this.setState({spin: false}) }, 1000)
     );
   }
-
+ 
+  /* renders option to manipulate time period range */
   render(): JSX.Element {
     return (
       <div className='date-range-container'>
@@ -103,7 +135,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
             </span>
             <span
               className={this.state.spin ? 'single-spin btn' : 'btn'}
-              style={{ backgroundColor: this.isValidRange(this.state.toDateInput, this.state.fromDateInput) ? 'gray' : ''}}
+              style={{ backgroundColor: this.rangeChosen().valid ? '' : 'gray'}}
               onClick={() => this.changeDate(null, this.state.fromDateInput, this.state.toDateInput)}
             >
               <span/>
