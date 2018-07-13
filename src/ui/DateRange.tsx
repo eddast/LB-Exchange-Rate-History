@@ -9,6 +9,7 @@ interface DateRangeState {
   activeRange: any;
   fromDateInput: Date;
   toDateInput: Date;
+  spin: Boolean;
 }
 interface TimeRanges {
   name: string;
@@ -32,7 +33,8 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     this.setState({
       toDateInput: this.props.toDate,
       fromDateInput: this.props.fromDate,
-      activeRange: this.PredefinedRanges[~~(this.PredefinedRanges.length/2)]
+      activeRange: this.PredefinedRanges[~~(this.PredefinedRanges.length/2)],
+      spin: false
     });
   }
 
@@ -54,6 +56,18 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     return y+"-"+m+"-"+d;
   }
 
+  changeDate(activeRange: any, from: Date, to: Date): void {
+    this.setState({ activeRange: activeRange });
+    this.props.changeDateRange(from, to);
+    this.spin();
+  }
+
+  spin(): void {
+    this.setState({ spin: true}, () =>
+      setTimeout(() => { this.setState({spin: false}) }, 1000)
+    );
+  }
+
   render(): JSX.Element {
     return (
       <div className='date-range-container'>
@@ -73,11 +87,8 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
             />
           </span>
           <span
-            className="btn"
-            onClick={() => {
-              this.setState({ activeRange: null });
-              this.props.changeDateRange(this.state.fromDateInput, this.state.toDateInput);
-            }}
+            className={this.state.spin ? 'single-spin btn' : 'btn'}
+            onClick={() => this.changeDate(null, this.state.fromDateInput, this.state.toDateInput)}
           >
             <span/>
           </span>
@@ -89,10 +100,8 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
             return ([
               <span
                 key={'slide-indicator-'+i}
-                onClick={() => {
-                  this.setState({ activeRange: range });
-                  this.props.changeDateRange(range.from, new Date());
-                }}
+                onClick={() => this.changeDate(range, range.from, new Date())}
+                
               >
                 <div
                   className={
@@ -106,8 +115,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
               <span
                 key={'label-' + i}
                 onClick={() => {
-                  this.setState({ activeRange: range });
-                  this.props.changeDateRange(range.from, new Date());
+                  
                 }}
                 className={isActive ? 'date-range-label active' : 'date-range-label'}
               >

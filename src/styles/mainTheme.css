@@ -74,6 +74,9 @@ html, body, #root {
   border-radius: 50%;
   animation: spin 1.2s linear infinite;
 }
+.single-spin {
+  animation: spin .5s linear 1;
+}
 .loader-large:after {
   width: 46px;
   height: 46px;

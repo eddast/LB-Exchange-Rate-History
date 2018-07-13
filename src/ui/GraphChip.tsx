@@ -38,7 +38,10 @@ class GraphChip extends React.Component <GraphChipProps, GraphChipState> {
         {!last ?
         <div
           className="small-gray-btn"
-          onClick={() => { this.setState({ shrink: true }); this.timeout = setTimeout(() => { onDelete(); this.setState({shrink: false}) }, 100)}}
+          onClick={() => {
+            this.setState({ shrink: true });
+            this.timeout = setTimeout(() => { onDelete(); this.setState({shrink: false}) }, 100)}
+          }
         >
           x
         </div>: null}
