@@ -4,12 +4,14 @@ interface DateRangeProps {
   changeDateRange: any;
   fromDate: Date;
   toDate: Date;
+  canChangeDate: boolean;
 }
 interface DateRangeState {
   activeRange: any;
   fromDateInput: Date;
   toDateInput: Date;
   spin: Boolean;
+  errorMessage: string;
 }
 interface TimeRanges {
   name: string;
@@ -56,10 +58,22 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     return y+"-"+m+"-"+d;
   }
 
-  changeDate(activeRange: any, from: Date, to: Date): void {
-    this.setState({ activeRange: activeRange });
-    this.props.changeDateRange(from, to);
-    this.spin();
+  isValidRange(from: Date, to: Date) {
+    return from < to;
+  }
+
+  changeDate(activeRange: any, from: Date, to?: Date): void {
+    if(this.props.canChangeDate) {
+      if(to === undefined) {
+        to = new Date();
+      } else if (!this.isValidRange(from, to)){
+        this.setState({ errorMessage: 'Ógilt tímabil valið'});
+        return;
+      } 
+      this.setState({ activeRange: activeRange, errorMessage: '' });
+      this.props.changeDateRange(from, to);
+      this.spin();
+    }
   }
 
   spin(): void {
@@ -71,27 +85,35 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
   render(): JSX.Element {
     return (
       <div className='date-range-container'>
-        <div className='date-range-picker-container'>
-          <span>Gengisþróun</span>
-          <span>
-            <input
-              type="date"
-              value={this.getInputDateStr(this.state.fromDateInput)}
-              onChange={(e: any) => this.setState({ fromDateInput: new Date(e.target.value) }) }
-            />
-            <span style={{ marginLeft: '15px', marginRight: '15px' }}> til </span>
-            <input
-              type="date"
-              value={this.getInputDateStr(this.state.toDateInput)}
-              onChange={(e: any) => this.setState({ toDateInput: new Date(e.target.value) }) }
-            />
-          </span>
-          <span
-            className={this.state.spin ? 'single-spin btn' : 'btn'}
-            onClick={() => this.changeDate(null, this.state.fromDateInput, this.state.toDateInput)}
-          >
-            <span/>
-          </span>
+        <div className='date-range-picker'>
+          <div className='date-range-picker-container'>
+            <span>Gengisþróun</span>
+            <span>
+              <input
+                type="date"
+                value={this.getInputDateStr(this.state.fromDateInput)}
+                onChange={(e: any) => this.setState({ fromDateInput: new Date(e.target.value) }) }
+              />
+              <span style={{ marginLeft: '15px', marginRight: '15px' }}> til </span>
+              <input
+                type="date"
+                value={this.getInputDateStr(this.state.toDateInput)}
+                onChange={(e: any) => this.setState({ toDateInput: new Date(e.target.value) }) }
+              />
+            </span>
+            <span
+              className={this.state.spin ? 'single-spin btn' : 'btn'}
+              style={{ backgroundColor: this.isValidRange(this.state.toDateInput, this.state.fromDateInput) ? 'gray' : ''}}
+              onClick={() => this.changeDate(null, this.state.fromDateInput, this.state.toDateInput)}
+            >
+              <span/>
+            </span>
+          </div>
+          <div>
+            <p style={{ display: this.state.errorMessage !== '' ? 'block' : 'none', height: '10px', margin: '7px 0', fontSize: '10px', textAlign: 'center', color: 'red' }}>
+              {this.state.errorMessage}
+            </p>
+          </div>
         </div>
         <div className='date-range-slider'>
           {this.PredefinedRanges.map((range: any, i: number) => {
@@ -100,7 +122,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
             return ([
               <span
                 key={'slide-indicator-'+i}
-                onClick={() => this.changeDate(range, range.from, new Date())}
+                onClick={() => this.changeDate(range, range.from)}
                 
               >
                 <div

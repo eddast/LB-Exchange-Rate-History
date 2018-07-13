@@ -117,6 +117,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
     return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   }
 
+  /* changes period from which data is fetched and re-fetches all data */
   changeDateRange(fromDate: any, toDate: any): any {
     this.setState({ fromDate: fromDate, toDate: toDate, loadingData: true});
     const responses = [];
@@ -201,6 +202,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
               changeDateRange={(to: Date, from: Date) => this.changeDateRange(to,from)}
               toDate={this.state.toDate}
               fromDate={this.state.fromDate}
+              canChangeDate={!this.state.loadingData}
             />
             <span className={'data-span'} style={{ filter: this.state.loadingData ? 'blur(2px)' : ''}}>
               {this.state.loadingData ? <div className="overlap"><div className="loader loader-large"/></div> : null}

@@ -398,11 +398,13 @@ html, body, #root {
     flex-direction: column;
   }
 }
+.date-range-picker {
+  margin-bottom: 30px;
+}
 .date-range-picker-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 30px;
   text-align: center;
 }
 .date-range-picker-container .btn {
