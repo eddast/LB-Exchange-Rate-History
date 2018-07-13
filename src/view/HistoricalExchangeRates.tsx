@@ -132,13 +132,17 @@ export default class HistoricalExchangeRates extends React.Component <Historical
       ));
     }
     const newData: ExchangeRateComparisonData[] = [];
+    const json: any[] = [];
     Promise.all(responses).then((values) => {
       for (let i = 0; i < values.length; i++) {
-        values[i].json().then((data) => {
-          newData.push(data);
-          this.setState({data: newData, loadingData: false});
-        });
+        json.push(values[i].json());
       }
+      Promise.all(json).then((values) => {
+        for (let i = 0; i < values.length; i++) {
+            newData.push(values[i]);
+        }
+        this.setState({data: newData, loadingData: false});
+      })
     });
   }
 
