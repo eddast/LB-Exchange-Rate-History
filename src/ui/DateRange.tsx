@@ -2,9 +2,13 @@ import * as React from 'react';
 
 interface DateRangeProps {
   changeDateRange: any;
+  fromDate: Date;
+  toDate: Date;
 }
 interface DateRangeState {
   activeRange: TimeRanges;
+  fromDateInput: Date;
+  toDateInput: Date;
 }
 interface TimeRanges {
   name: string;
@@ -12,8 +16,6 @@ interface TimeRanges {
 }
 export default class DateRange extends React.Component<DateRangeProps, DateRangeState> {
   private PredefinedRanges: TimeRanges[] = [
-    { name: 'vika', from: this.getDateWeeksBefore(1) },
-    { name: 'tvær vikur', from: this.getDateWeeksBefore(2) },
     { name: 'mánuður', from: this.getDateMonthsBefore(1) },
     { name: 'sex mánuðir', from: this.getDateMonthsBefore(6) },
     { name: 'ár', from: this.getDateMonthsBefore(12) },
@@ -26,14 +28,11 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     date.setMonth(date.getMonth() - months);
     return date;
   }
-  getDateWeeksBefore(week: number): Date {
-    let date = new Date();
-    date.setDate(date.getDate() - 7 * week);
-    return date;
-  }
   componentWillMount(): void {
     this.setState({
-      activeRange: this.PredefinedRanges[3]
+      toDateInput: this.props.toDate,
+      fromDateInput: this.props.fromDate,
+      activeRange: this.PredefinedRanges[~~(this.PredefinedRanges.length/2)]
     });
   }
 
@@ -48,15 +47,31 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     return <div className={lessThanActive ? 'slide-bar active' : 'slide-bar'}></div>
   }
 
+  getInputDateStr(date: Date): string {
+    const d = date.getDate() < 10 ? '0' + date.getDate() : date.getDate(),
+          m = date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1), 
+          y = date.getFullYear();
+    return y+"-"+m+"-"+d;
+  }
+
   render(): JSX.Element {
+    console.log(this.getInputDateStr(this.state.fromDateInput))
     return (
       <div className='date-range-container'>
         <div className='date-range-picker-container'>
           <span>Gengisþróun</span>
           <span>
-            <input type="date" />
+            <input
+              type="date"
+              value={this.getInputDateStr(this.state.fromDateInput)}
+              onChange={(e: any) => this.setState({ fromDateInput: new Date(e.target.value) }) }
+            />
             <span style={{ marginLeft: '15px', marginRight: '15px' }}> til </span>
-            <input type="date"/>
+            <input
+              type="date"
+              value={this.getInputDateStr(this.state.toDateInput)}
+              onChange={(e: any) => this.setState({ toDateInput: new Date(e.target.value) }) }
+            />
           </span>
           <span className="btn" ><span/></span>
         </div>
