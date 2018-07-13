@@ -39,14 +39,14 @@ interface HistoricalExchangeRatesProps {
   
 }
 interface HistoricalExchangeRatesState {
-  data: ExchangeRateComparisonData[];
-  currencyOptions: CurrencyOption[];
-  colors: string[];
-  fatalError: boolean;
-  activeComparions: string[];
-  fromDate: Date;
-  toDate: Date;
-  loadingData: boolean;
+  data: ExchangeRateComparisonData[];     /* all comparison data already fetched from API */
+  currencyOptions: CurrencyOption[];      /* available currencies for comparison */
+  colors: string[];                       /* color pallette */
+  fatalError: boolean;                    /* true if app cannot start and API cannot be communicated with*/
+  activeComparions: string[];             /* maintains all current comparisons in app */
+  fromDate: Date;                         /* first date of data comparison period */
+  toDate: Date;                           /* last date of data comparison period */
+  loadingData: boolean;                   /* true if all data is being refetched to indicate load*/
 }
 export default class HistoricalExchangeRates extends React.Component <HistoricalExchangeRatesProps, HistoricalExchangeRatesState> {
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import calculateChangePercentage from '../services/CalculateChangePercentage'
+import CalculateChangePercentage from '../services/CalculateChangePercentage'
 
 /**
  * CURRENCYTABLE COMPONENT
@@ -38,10 +38,10 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
     { title: '',                              dataTargetID: 'color',            sortable: false },
     { title: 'Gjaldmiðlar',                   dataTargetID: 'currencies',       sortable: false },
     { title: 'Upphaf',                        dataTargetID: 'initialMid',       sortable: true },
-    { title: 'Endir',                         dataTargetID: 'endMid',           sortable: true },
+    { title: 'Lok',                           dataTargetID: 'endMid',           sortable: true },
     { title: 'Lægst',                         dataTargetID: 'lowestMid',        sortable: true },
     { title: 'Hæst',                          dataTargetID: 'highestMid',       sortable: true },
-    { title: 'Heildarbreyting (%)',           dataTargetID: 'changePercentage', sortable: true },
+    { title: 'Heildarbreyting',               dataTargetID: 'changePercentage', sortable: true },
     { title: '',                              dataTargetID: 'deleteAction',     sortable: false },
   ];
 
@@ -88,7 +88,7 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
         endMid: endMid,
         lowestMid: parseFloat(currentLowestMid.toFixed(4)),
         highestMid: parseFloat(currentHighestMid.toFixed(4)),
-        changePercentage: calculateChangePercentage(endMid, initialMid, 3),
+        changePercentage: CalculateChangePercentage(endMid, initialMid, 2),
         color: this.props.colors[i % this.props.colors.length]
       }; tableEntries.push(tableEntry);
     });
@@ -165,7 +165,7 @@ export default class CurrencyTable extends React.Component<CurrencyTableProps, C
 
                   /* change value has a color indicating if it's positive */
                   } else if(isChangeValue) {
-                    return <td key={j} style={{ color: entry[column.dataTargetID] < 0 ? 'red' : 'green' }}>{entry[column.dataTargetID]}</td>;
+                    return <td key={j} style={{ color: entry[column.dataTargetID] < 0 ? 'red' : 'green' }}>{entry[column.dataTargetID]}%</td>;
 
                   /* delete column displays delete action if table has more than one value */
                   } else if (isDeleteAction) {

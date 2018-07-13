@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MONTHS, MONTHIDS } from '../resources/constants';
 import { ExchangeRateComparisonData } from '../resources/interfaces';
-import calculateChangePercentage from '../services/CalculateChangePercentage';
+import CalculateChangePercentage from '../services/CalculateChangePercentage';
 
 /**
  * LINECHART COMPONENT
@@ -79,7 +79,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
     dataSet = data.forEach((pts: any, i: number) => {
       pts.map((p: any) => {
         // Extract values for all datasets to construct graphs
-        const pointVal = singleGraph ? p.mid : calculateChangePercentage(p.mid, pts[0].mid, 3);
+        const pointVal = singleGraph ? p.mid : CalculateChangePercentage(p.mid, pts[0].mid, 3);
         pointVal > maxValue ? maxValue = pointVal : null;
         pointVal < minValue ? minValue = pointVal : null;
         const currDate = new Date(p.date);
@@ -97,7 +97,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
         if (this.longerThanDay(this.getDateDifference(pt.date, prevDate))) {
           x = ~~(prevX + (xInterval * 3)) + .5;
         } prevX = x; prevDate = pt.date;
-        const pointVal = singleGraph ? pt.mid : calculateChangePercentage(pt.mid, pts[0].mid, 3);
+        const pointVal = singleGraph ? pt.mid : CalculateChangePercentage(pt.mid, pts[0].mid, 3);
         return ({
           /* x coordinate of point in graph */
           x,
@@ -185,7 +185,7 @@ interface TooltipProps {
 const Tooltip = ({ point, pointInitial }: TooltipProps) => {
   const { value } = point;
   const date = new Date(value.date);
-  const changeValuePercentage = calculateChangePercentage(value.mid, pointInitial.value.mid, 3);
+  const changeValuePercentage = CalculateChangePercentage(value.mid, pointInitial.value.mid, 3);
   return (
     <span
       className="rate-history-chart--tooltip"

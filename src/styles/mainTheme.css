@@ -453,6 +453,7 @@ html, body, #root {
   border: none;
   border-bottom: 1px solid #363434;
   transition: all .2s ease-in-out;
+  cursor: text;
 }
 .date-range-picker-container input[type="date"]:active,
 .date-range-picker-container input[type="date"]:hover {
@@ -471,6 +472,7 @@ html, body, #root {
 
 .date-range-picker-container input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
+  cursor: pointer;
 }
 
 .date-range-picker-container input[type="date"]::-webkit-datetime-edit-text {
