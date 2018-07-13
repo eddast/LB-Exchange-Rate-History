@@ -6,7 +6,7 @@ interface DateRangeProps {
   toDate: Date;
 }
 interface DateRangeState {
-  activeRange: TimeRanges;
+  activeRange: any;
   fromDateInput: Date;
   toDateInput: Date;
 }
@@ -72,12 +72,20 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
               onChange={(e: any) => this.setState({ toDateInput: new Date(e.target.value) }) }
             />
           </span>
-          <span className="btn" ><span/></span>
+          <span
+            className="btn"
+            onClick={() => {
+              this.setState({ activeRange: null });
+              this.props.changeDateRange(this.state.fromDateInput, this.state.toDateInput);
+            }}
+          >
+            <span/>
+          </span>
         </div>
         <div className='date-range-slider'>
           {this.PredefinedRanges.map((range: any, i: number) => {
             const isActive: boolean = this.state.activeRange === range;
-            const lessThanActive: boolean = this.state.activeRange.from.getTime() < range.from.getTime();
+            const lessThanActive: boolean = this.state.activeRange === null ? false : this.state.activeRange.from.getTime() < range.from.getTime();
             return ([
               <span
                 key={'slide-indicator-'+i}
