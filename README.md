@@ -1,5 +1,5 @@
 # LB-Exchange-Rate-History
-Small React TypeScript project for Landsbankinn, implements an exchange rate history for comparing one or more tuples of currencies by visualization via interactive SVG line chart and via extracting most significant values to display in an interactive sortable table. Version of implementation available on CodePen.
+Small React TypeScript project for Landsbankinn, implements an exchange rate history for comparing one or more tuples of currencies by visualization via interactive SVG line chart and via extracting most significant values to display in an interactive sortable table. Version of implementation available on [CodePen](https://codepen.io/eddast/pen/RBWGqP).
 
 ## Installation and running the App
 External dependencies for the project must be installed for it to work. This is achieved by using npm or yarn, both of which can be downloaded from https://www.npmjs.com/get-npm or installed in the terminal on a linux based OS or installed via node: 
