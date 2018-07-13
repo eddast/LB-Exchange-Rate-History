@@ -5,21 +5,21 @@ import * as React from 'react';
  * Renders all options to manipulate period range of data and all logic
  */
 interface DateRangeProps {
-  changeDateRange: any;
-  fromDate: Date;
-  toDate: Date;
-  canChangeDate: boolean;
+  changeDateRange: any;           /* function, changes data's date range and triggers re-fetch */
+  fromDate: Date;                 /* beginning date of current data period */
+  toDate: Date;                   /* end date of current data period */
+  canChangeDate: boolean;         /* false if data is loading and date cannot be changed */
 }
 interface DateRangeState {
-  activeRange: any;
-  fromDateInput: Date;
-  toDateInput: Date;
-  spin: Boolean;
-  errorMessage: string;
+  activeRange: TimeRanges | null; /* predefined time range currently active, may be null */
+  fromDateInput: Date;            /* beginning date user selected from picker */
+  toDateInput: Date;              /* end date user selected from picker */
+  spin: Boolean;                  /* true if refresh button should spin to indicate load */
+  errorMessage: string;           /* message to user if potential error is present */
 }
 interface TimeRanges {
-  name: string;
-  from: Date;
+  name: string;                   /* name of time range */
+  from: Date;                     /* beginning date of time range */
 }
 export default class DateRange extends React.Component<DateRangeProps, DateRangeState> {
 
@@ -47,7 +47,8 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
       toDateInput: this.props.toDate,
       fromDateInput: this.props.fromDate,
       activeRange: this.PredefinedRanges[~~(this.PredefinedRanges.length/2)],
-      spin: false
+      spin: false,
+      errorMessage: ''
     });
   }
 
@@ -73,7 +74,12 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
 
   /* returns true if user has chosen a valid time range */
   rangeChosen() {
-    if (this.state.fromDateInput > new Date() || this.state.toDateInput > new Date()) {
+    if(isNaN(this.state.fromDateInput.getTime()) || isNaN(this.state.toDateInput.getTime())) {
+      return {
+        valid: false,
+        message: 'Dagsetning ógild'
+      }
+    } else if (this.state.fromDateInput > new Date() || this.state.toDateInput > new Date()) {
       return {
         valid: false,
         message: 'Ekki má velja ókomna dagsetningu'
