@@ -33,4 +33,4 @@ All data fetched by this program belongs to Landsbankinn
 * User can change the time period of data, either choose a custom valid rang or a predefined shortcut range by clicking a point in the range slider. Once new period is chosen, data is refetched and load spinner covers data visualizations. While data is being re-fetched, user cannot add a new comparison to app nor change the time period.
 
 ## Sample screenshot
-![alt text](https://image.ibb.co/h12sZ8/screencapture_localhost_8080_2018_07_13_12_09_56.png "Exchange rate history app") 
+![alt text](https://image.ibb.co/fsmL48/screencapture_localhost_8080_2018_07_13_17_24_58.png "Exchange rate history app") 
