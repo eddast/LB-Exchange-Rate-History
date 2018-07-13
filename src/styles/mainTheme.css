@@ -392,6 +392,9 @@ html, body, #root {
   background-color: #194262;
   transition: all .2s ease-in-out;
 }
+.date-range-picker-container .btn-loading {
+  animation: spin 1.2s linear infinite;
+}
 .date-range-picker-container .btn span {
   display: inline-block;
   width: 24px;

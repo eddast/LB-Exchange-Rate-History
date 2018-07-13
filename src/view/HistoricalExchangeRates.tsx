@@ -54,14 +54,14 @@ export default class HistoricalExchangeRates extends React.Component <Historical
   componentWillMount(): void {
     const initialSourceCurrency = 'ISK', initialTargetCurrency = 'EUR';
     let today = new Date();
-    let sixMonthsBefore = new Date(); sixMonthsBefore.setMonth(sixMonthsBefore.getMonth() - 6);
+    let yearBeforeToday = new Date(); yearBeforeToday.setMonth(yearBeforeToday.getMonth() - 12);
     this.setState({
       data: [],
       currencyOptions: [],
       fatalError: false,
       activeComparions: [],
       colors: COLORS,
-      fromDate: sixMonthsBefore,
+      fromDate: yearBeforeToday,
       toDate: today
     }, () => {
       fetch('https://api.landsbankinn.is/Securities/Currencies/v2/Currencies',
@@ -199,6 +199,8 @@ export default class HistoricalExchangeRates extends React.Component <Historical
           </span>
             <DateRange
               changeDateRange={(to: Date, from: Date) => this.changeDateRange(to,from)}
+              toDate={this.state.toDate}
+              fromDate={this.state.fromDate}
             />
             <span className={'data-span'}>
               {this.state.loadingData ? <div className="loader"/> : null}
