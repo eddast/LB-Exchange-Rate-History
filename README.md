@@ -24,6 +24,7 @@ All data fetched by this program belongs to Landsbankinn
 * Top-right area of app displays all active comparisons in the form of small chips which show given comparison's color and their shortened currencies ID.
 * Below add menu and active comparisons, options are displayed for user to change data's time period range, both in the form of input boxes (to show range and to input custom range) and, for a chosen predefined ranges, a period range slider.
 * Below add and change date range options line chart is displayed that shows mid (miðgengi) and dates for all points of comparison IF only a single comparison is active, otherwise the line chart shows the difference between point's mid and point's starting mid and the dates.
+* When user hovers over a graph in the line chart, a tooltip appears providing details of which data is being displayed, mid, change from initial mid, etc.
 * Below the line chart a currency rate table is displayed for all comparisons, showing initial mid for period, end mid for period, lowest mid of period, highest mid of period and change from initial mid to end mid in percentages.
 
 ## Interaction
@@ -32,4 +33,4 @@ All data fetched by this program belongs to Landsbankinn
 * User can change the time period of data, either choose a custom valid rang or a predefined shortcut range by clicking a point in the range slider. Once new period is chosen, data is refetched and load spinner covers data visualizations. While data is being re-fetched, user cannot add a new comparison to app nor change the time period.
 
 ## Sample screenshot
-![alt text](https://image.ibb.co/eBZd7T/screencapture_localhost_8080_2018_07_13_11_36_53.png "Exchange rate history app")
+![alt text](https://image.ibb.co/h12sZ8/screencapture_localhost_8080_2018_07_13_12_09_56.png "Exchange rate history app")
