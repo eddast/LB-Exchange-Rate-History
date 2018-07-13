@@ -18,7 +18,7 @@ interface TimeRanges {
 export default class DateRange extends React.Component<DateRangeProps, DateRangeState> {
   private PredefinedRanges: TimeRanges[] = [
     { name: 'mánuður', from: this.getDateMonthsBefore(1) },
-    { name: 'sex mánuðir', from: this.getDateMonthsBefore(6) },
+    { name: 'hálft ár', from: this.getDateMonthsBefore(6) },
     { name: 'ár', from: this.getDateMonthsBefore(12) },
     { name: 'tvö ár', from: this.getDateMonthsBefore(2 * 12) },
     { name: 'fimm ár', from: this.getDateMonthsBefore(5 * 12) },
