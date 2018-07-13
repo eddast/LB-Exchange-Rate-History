@@ -10,6 +10,7 @@ interface AddCurrencyProps {
   currencies: CurrencyOption[]; /* currencies available for comparison */
   addComparison: any;           /* function, adds comparison cross to data */
   activeComparions: any;        /* all currently active comparison crosses */
+  cannotAdd: boolean;           /* true if data cannot be added due to load */
 }
 interface AddCurrencyState {
   sourceCurrency: string;       /* current selected currency for source */
@@ -33,12 +34,13 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
       sourceCurrency: sourceCurrency,
       targetCurrency: '',
       errorMessage: '',
-      isAdding: false
+      isAdding: false,
     });
   }
 
   /* adds comparison cross based on selected currencies, displays error if appropriate */
   addComparisonCross(): void {
+    if(this.props.cannotAdd) { return; }
     const { sourceCurrency, targetCurrency } = this.state;
     const compCrossValid = this.invalidSelect();
     if (compCrossValid.error) {

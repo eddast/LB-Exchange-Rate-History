@@ -184,6 +184,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
                 activeComparions={this.state.activeComparions}
                 maximumExceeded={this.state.data.length >= MAXCOMPARISONS}
                 currencies={this.state.currencyOptions}
+                cannotAdd={this.state.loadingData}
               />
             </span>
             <span className="graph-chips">

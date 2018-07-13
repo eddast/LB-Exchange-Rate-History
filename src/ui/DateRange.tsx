@@ -73,15 +73,15 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
 
   /* returns true if user has chosen a valid time range */
   rangeChosen() {
-    if(this.state.fromDateInput >= this.state.toDateInput) {
-      return {
-        valid: false,
-        message: 'Upphafsdagsetning tímabils þarf að vera smærri en endadagsetning'
-      }
-    } else if (this.state.fromDateInput > new Date() || this.state.toDateInput > new Date()) {
+    if (this.state.fromDateInput > new Date() || this.state.toDateInput > new Date()) {
       return {
         valid: false,
         message: 'Ekki má velja ókomna dagsetningu'
+      }
+    } else if(this.state.fromDateInput >= this.state.toDateInput) {
+      return {
+        valid: false,
+        message: 'Upphafsdagsetning tímabils þarf að vera smærri en endadagsetning'
       }
     } else {
       return {
@@ -100,7 +100,12 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
         this.setState({ errorMessage: this.rangeChosen().message });
         return;
       } 
-      this.setState({ activeRange: activeRange, errorMessage: '' });
+      this.setState({
+        activeRange: activeRange,
+        errorMessage: '',
+        toDateInput: to,
+        fromDateInput: from
+      });
       this.props.changeDateRange(from, to);
       this.spin();
     }
@@ -119,23 +124,25 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
       <div className='date-range-container'>
         <div className='date-range-picker'>
           <div className='date-range-picker-container'>
-            <span>Gengisþróun</span>
+            <span>Gengisþróun frá </span>
             <span>
               <input
                 type="date"
+                required={true}
                 value={this.getInputDateStr(this.state.fromDateInput)}
                 onChange={(e: any) => this.setState({ fromDateInput: new Date(e.target.value) }) }
               />
               <span style={{ marginLeft: '15px', marginRight: '15px' }}> til </span>
               <input
                 type="date"
+                required={true}
                 value={this.getInputDateStr(this.state.toDateInput)}
                 onChange={(e: any) => this.setState({ toDateInput: new Date(e.target.value) }) }
               />
             </span>
             <span
               className={this.state.spin ? 'single-spin btn' : 'btn'}
-              style={{ backgroundColor: this.rangeChosen().valid ? '' : 'gray'}}
+              style={{ backgroundColor: this.rangeChosen().valid && this.props.canChangeDate ? '' : 'gray'}}
               onClick={() => this.changeDate(null, this.state.fromDateInput, this.state.toDateInput)}
             >
               <span/>
