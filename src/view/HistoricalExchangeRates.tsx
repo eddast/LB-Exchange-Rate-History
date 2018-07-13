@@ -201,7 +201,7 @@ export default class HistoricalExchangeRates extends React.Component <Historical
               changeDateRange={(to: Date, from: Date) => this.changeDateRange(to,from)}
             />
             <span className={'data-span'}>
-              {this.state.loadingData ? <div className="loader"/> : null}
+              {this.state.loadingData ? <div className="overlap"><div className="loader loader-large"/></div> : null}
               <LineChart
                 data={this.state.data}
                 colors={this.state.colors}

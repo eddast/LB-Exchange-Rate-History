@@ -91,6 +91,21 @@ html, body, #root {
   100%  { transform: rotate(360deg);  }
 }
 
+.data-span {
+  position: relative;
+}
+
+.overlap {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100% !important;
+  background-color: rgba(226, 213, 213, 0.4);
+  z-index: 100;
+}
+
 
 /** ADD CURRENCY SECTION **/
 .add-currency-options{
