@@ -4,7 +4,7 @@ import { ExchangeRateComparisonData } from '../resources/interfaces';
 import CalculateChangePercentage from '../services/CalculateChangePercentage';
 
 /**
- * LINECHART COMPONENT
+ * TAKK ECHART COMPONENT
  * Plots a SVG line chart from exchange rate data provided as props
  */
 interface LineChartProps {
@@ -141,6 +141,7 @@ export default class LineChart extends React.Component<LineChartProps, LineChart
               width={width}
               height={height}
               firstY={firstY}
+              singleGraph={singleGraph}
             />
           </g>
           {dataSet.map((comparisonGraph: any, graphIdx: any) =>
@@ -185,7 +186,7 @@ interface TooltipProps {
 const Tooltip = ({ point, pointInitial }: TooltipProps) => {
   const { value } = point;
   const date = new Date(value.date);
-  const changeValuePercentage = CalculateChangePercentage(value.mid, pointInitial.value.mid, 3);
+  const changeValuePercentage = CalculateChangePercentage(value.mid, pointInitial.value.mid, 2);
   return (
     <span
       className="rate-history-chart--tooltip"
@@ -214,8 +215,9 @@ interface YAxisProps {
   minValue: number;							/* lowest y value of linechart */
   width: number;								/* linechart width in px */
   firstY: number;								/* y coordinate of first point */
+  singleGraph: boolean;         /* true if only one graph is displayed */
 }
-const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProps) => {
+const YAxis = ({ padding, height, maxValue, minValue, width, firstY, singleGraph}: YAxisProps) => {
   const numAxis = 6;											/* number of axis */
   let axis = [];
 
@@ -273,7 +275,7 @@ const YAxis = ({ padding, height, maxValue, minValue, width, firstY }: YAxisProp
           y={y + 2}
           textAnchor="end"
         >
-          {parseFloat(intervals[i].toFixed(2))}
+          {parseFloat(intervals[i].toFixed(2)) + (singleGraph ? '' : '%')}
         </text>
       </g>
     );
@@ -315,7 +317,7 @@ const XAxis = ({ padding, height, minDate, maxDate, width, singleGraph }: XAxisP
         x={x}
         y={y - 20}
       >
-        {singleGraph ? 'Miðgengi' : 'Breyting (%)'}
+        {singleGraph ? 'Miðgengi' : 'Breyting'}
       </text>
     </g>
   );
@@ -365,7 +367,8 @@ const Points = ({ points, dataSetIndex, showTooltip, hideTooltip }: PointsProps)
           initialPoint={points[0]}
           showTooltip={showTooltip}
           hideTooltip={hideTooltip}
-        />)}
+        />)
+        }
     </g>
   );
 };

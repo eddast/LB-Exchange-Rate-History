@@ -73,7 +73,7 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
   }
 
   /* returns true if user has chosen a valid time range */
-  rangeChosen() {
+  rangeChosen() : any {
     if(isNaN(this.state.fromDateInput.getTime()) || isNaN(this.state.toDateInput.getTime())) {
       return {
         valid: false,
@@ -82,12 +82,12 @@ export default class DateRange extends React.Component<DateRangeProps, DateRange
     } else if (this.state.fromDateInput > new Date() || this.state.toDateInput > new Date()) {
       return {
         valid: false,
-        message: 'Ekki má velja ókomna dagsetningu'
+        message: 'Ekki má velja dagsetningu fram í tímann'
       }
     } else if(this.state.fromDateInput >= this.state.toDateInput) {
       return {
         valid: false,
-        message: 'Upphafsdagsetning tímabils þarf að vera smærri en endadagsetning'
+        message: 'Upphafsdagsetning tímabils þarf að vera á undan lokadagsetningu'
       }
     } else {
       return {

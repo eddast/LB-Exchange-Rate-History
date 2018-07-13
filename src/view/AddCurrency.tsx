@@ -67,22 +67,22 @@ export default class AddCurrency extends React.Component <AddCurrencyProps, AddC
     if (sourceCurrency === targetCurrency ) {
       return {
         error: true,
-        reasonPhrase: 'Vinsamlegast veldu mismunandi gjaldmiðla í báða reiti'
+        reasonPhrase: 'Vinsamlega veldu mismunandi gjaldmiðla í báða reiti'
       };
     } else if (targetCurrency === '') {
       return {
         error: true,
-        reasonPhrase: 'Vinsamlegast veldu gjaldmiðil í báða reiti'
+        reasonPhrase: 'Vinsamlega veldu gjaldmiðil í báða reiti'
       };
     } else if (this.props.activeComparions.includes(sourceCurrency+'-'+targetCurrency)) {
       return {
         error: true,
-        reasonPhrase: 'Samanburður þessa gjaldmiðla þegar valinn'
+        reasonPhrase: 'Samanburður þessara gjaldmiðla er þegar valinn'
       }
     } else if(maximumExceeded) {
       return {
         error: true,
-        reasonPhrase: 'Of margir samanburðir virkir, fjarlægðu einn eða fleiri til að bæta við nýjum gengissamanburð'
+        reasonPhrase: 'Of margir gjaldmiðlar valdir, vinsamlega fjarlægðu a.m.k. einn til að bæta við nýjum gengissamanburði'
       }
     } else {
       return {
