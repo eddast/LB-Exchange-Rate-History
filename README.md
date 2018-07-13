@@ -9,7 +9,7 @@ username$ pwd
 ~/.../LB-Exchange-Rate-History
 username$ yarn install
 ```
-Then to run the program, one can use yarn start or npm start. On npm start, the project will be hosted at https://localhost:8080:
+Then to run the program, one can use yarn start or npm start. When run, the project will be hosted at https://localhost:8080:
 
 ```bash
 username$ pwd
